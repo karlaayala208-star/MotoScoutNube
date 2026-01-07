@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/scrollView"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvDetalleTitulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Detalle de Solicitud"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:paddingBottom="16dp"/>
+
+        <TextView
+            android:id="@+id/tvMoto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Moto: "
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvTipoServicio"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Tipo de Servicio: "
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvFechaSolicitud"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Fecha de Solicitud: "
+            android:textSize="18sp"
+            android:paddingBottom="8dp" />
+
+        <TextView
+            android:id="@+id/tvEstado"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Estado: "
+            android:textSize="18sp"
+            android:paddingBottom="16dp" />
+
+        <!-- Campo editable monto -->
+        <EditText
+            android:id="@+id/etMonto"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Monto Pagado"
+            android:inputType="numberDecimal"
+            android:paddingBottom="8dp" />
+
+        <!-- Spinner para forma de pago -->
+        <Spinner
+            android:id="@+id/spinnerFormaPago"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="16dp" />
+
+        <!-- Botón para finalizar -->
+        <Button
+            android:id="@+id/btnFinalizar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Finalizar Servicio" />
+
+    </LinearLayout>
+
+</ScrollView>

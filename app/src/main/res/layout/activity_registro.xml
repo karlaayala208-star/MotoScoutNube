@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".Registro">
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:fontFamily="@font/agbalumo"
+        android:text="Registrarse"
+        android:textAlignment="center"
+        android:textColor="@color/txtbtn"
+        android:textSize="48sp"
+        app:layout_constraintBottom_toTopOf="@+id/TxtNomb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/TxtNomb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Nombre"
+        android:inputType="text"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/TxtEm"
+        app:layout_constraintEnd_toStartOf="@+id/TxtApell"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+    <EditText
+        android:id="@+id/TxtApell"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Apellido"
+        android:inputType="text"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/TxtNomb"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/TxtNomb"
+        app:layout_constraintTop_toTopOf="@+id/TxtNomb"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/TxtEm"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Correo electronico"
+        android:inputType="textEmailAddress"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/TxtNumb"
+        app:layout_constraintEnd_toEndOf="@+id/TxtApell"
+        app:layout_constraintStart_toStartOf="@+id/TxtNomb"
+        app:layout_constraintTop_toBottomOf="@+id/TxtNomb" />
+
+    <EditText
+        android:id="@+id/TxtNumb"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Numero de telefono"
+        android:inputType="number"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/TxtPass"
+        app:layout_constraintEnd_toEndOf="@+id/TxtEm"
+        app:layout_constraintStart_toStartOf="@+id/TxtEm"
+        app:layout_constraintTop_toBottomOf="@+id/TxtEm" />
+
+    <EditText
+        android:id="@+id/TxtPass"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Contraseña"
+        android:inputType="textPassword"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/TxtDate"
+        app:layout_constraintEnd_toEndOf="@+id/TxtNumb"
+        app:layout_constraintStart_toStartOf="@+id/TxtNumb"
+        app:layout_constraintTop_toBottomOf="@+id/TxtNumb" />
+
+    <EditText
+        android:id="@+id/TxtDate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="@color/black"
+        android:ems="10"
+        android:hint="Fecha de nacimiento"
+        android:inputType="date"
+        android:textColorHint="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toTopOf="@+id/button4"
+        app:layout_constraintEnd_toEndOf="@+id/TxtPass"
+        app:layout_constraintStart_toStartOf="@+id/TxtPass"
+        app:layout_constraintTop_toBottomOf="@+id/TxtPass" />
+
+    <EditText
+        android:id="@+id/TxtExperiencia"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Años de experiencia"
+        android:inputType="number"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@+id/TxtDate"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        android:layout_marginTop="8dp" />
+
+    <EditText
+        android:id="@+id/TxtUbicacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Ubicación del taller"
+        android:inputType="text"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/TxtExperiencia"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/fondo"
+        android:fontFamily="@font/chicle"
+        android:onClick="Inicio"
+        android:text="Crear cuenta"
+        android:textColor="@color/texto"
+        android:textSize="30sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TxtDate" />
+</androidx.constraintlayout.widget.ConstraintLayout>

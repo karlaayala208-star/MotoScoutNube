@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context=".ServReal">
+
+  <LinearLayout
+      android:id="@+id/linearLayout10"
+      android:layout_width="407dp"
+      android:layout_height="193dp"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      app:layout_constraintBottom_toTopOf="@+id/linearLayout12"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout6">
+
+    <ImageView
+        android:id="@+id/img_servc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/botonsecun"
+        app:srcCompat="@mipmap/serv" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:onClick="Recibo"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/txt_ubi"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="TESCo"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/txt_fecha"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="19/01/2025 6:00PM"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/txt_svc"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Cambio de bujia"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/txt_prc"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="$100"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+    </LinearLayout>
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/linearLayout6"
+      android:layout_width="411dp"
+      android:layout_height="32dp"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      android:textAlignment="textEnd"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toTopOf="parent">
+
+    <ImageView
+        android:id="@+id/imageView28"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/fondo"
+        android:onClick="Regresar"
+        app:srcCompat="@mipmap/flecha" />
+
+    <TextView
+        android:id="@+id/textView30"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:text="Mecanico"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="24sp" />
+
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/linearLayout12"
+      android:layout_width="410dp"
+      android:layout_height="218dp"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      app:layout_constraintBottom_toTopOf="@+id/linearLayout13"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout10">
+
+    <ImageView
+        android:id="@+id/imageView33"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/botonsecun"
+        android:onClick="Recibo"
+        app:srcCompat="@mipmap/serv" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/textView53"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="AquaMarina"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/textView54"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="17/01/2025 2:00PM"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/textView55"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Carga de Bateria"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/textView56"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="$100"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+    </LinearLayout>
+  </LinearLayout>
+
+  <LinearLayout
+      android:id="@+id/linearLayout13"
+      android:layout_width="0dp"
+      android:layout_height="191dp"
+      android:background="@color/white"
+      android:orientation="horizontal"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintHorizontal_bias="0.5"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintTop_toBottomOf="@+id/linearLayout12">
+
+    <ImageView
+        android:id="@+id/imageView34"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:background="@color/botonsecun"
+        android:onClick="Recibo"
+        app:srcCompat="@mipmap/serv" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+      <TextView
+          android:id="@+id/textView57"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text=" Casa Karlita"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/textView58"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="10/01/2025 2:00PM"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/textView59"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="Servicio Moto"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+
+      <TextView
+          android:id="@+id/textView60"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_weight="1"
+          android:text="$780"
+          android:textAlignment="center"
+          android:textColor="@color/black"
+          android:textSize="24sp" />
+    </LinearLayout>
+  </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

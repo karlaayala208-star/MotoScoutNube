@@ -1,0 +1,52 @@
+<!-- res/layout/item_solicitud.xml -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/tvMoto"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Moto: Honda CG 125"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tvTipoServicio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Servicio: Cambio de aceite"
+        android:textSize="14sp"
+        android:textColor="#444444"
+        app:layout_constraintTop_toBottomOf="@id/tvMoto"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <TextView
+        android:id="@+id/tvFechaSolicitud"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fecha: 2025-07-01"
+        android:textSize="12sp"
+        android:textColor="#666666"
+        app:layout_constraintTop_toBottomOf="@id/tvTipoServicio"
+        app:layout_constraintLeft_toLeftOf="parent" />
+
+    <TextView
+        android:id="@+id/tvEstado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Estado: Pendiente"
+        android:textSize="12sp"
+        android:textColor="#E53935"
+        app:layout_constraintTop_toBottomOf="@id/tvTipoServicio"
+        app:layout_constraintRight_toRightOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
