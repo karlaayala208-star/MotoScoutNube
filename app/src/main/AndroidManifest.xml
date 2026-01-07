@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.SEND_SMS" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.HIGH_SAMPLING_RATE_SENSORS" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MotoScout"
+        tools:targetApi="31">
+        <activity
+            android:name=".Generarticket"
+            android:exported="false" />
+        <activity
+            android:name=".detalle_solicitud"
+            android:exported="false" />
+        <activity
+            android:name=".Serv_pendt"
+            android:exported="false" />
+        <activity
+            android:name=".Tipo_serv"
+            android:exported="false" />
+        <activity
+            android:name=".Agregarmoto"
+            android:exported="false" />
+        <activity
+            android:name=".Addcoment"
+            android:exported="false" />
+        <activity
+            android:name=".CalfMec"
+            android:exported="false" />
+        <activity
+            android:name=".PagoServicios"
+            android:exported="false" />
+        <activity
+            android:name=".serve"
+            android:exported="false" />
+        <activity
+            android:name=".FormaPago"
+            android:exported="false" />
+        <activity
+            android:name=".Bloqueo"
+            android:exported="false" />
+        <activity
+            android:name=".ConfMec"
+            android:exported="false" />
+        <activity
+            android:name=".SerMot"
+            android:exported="false" />
+        <activity
+            android:name=".Mecanico"
+            android:exported="false" />
+        <activity
+            android:name=".ServReal"
+            android:exported="false" />
+        <activity
+            android:name=".UserMec"
+            android:exported="false" />
+        <activity
+            android:name=".Mantenimiento"
+            android:exported="false" />
+        <activity
+            android:name=".Campana"
+            android:exported="false" />
+        <activity
+            android:name=".EditPerfil"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity2"
+            android:exported="false" />
+        <activity
+            android:name=".Recordatorios"
+            android:exported="false" />
+        <activity
+            android:name=".Recordatorio"
+            android:exported="false" />
+        <activity
+            android:name=".Tarjeta"
+            android:exported="false" />
+        <activity
+            android:name=".Pago"
+            android:exported="false" />
+        <activity
+            android:name=".MetPag"
+            android:exported="false" />
+        <activity
+            android:name=".Serv"
+            android:exported="false" />
+        <activity
+            android:name=".conf"
+            android:exported="false" />
+        <activity
+            android:name=".Conf"
+            android:exported="false" />
+        <activity
+            android:name=".OpiEnv"
+            android:exported="false" />
+        <activity
+            android:name=".Calf"
+            android:exported="false" />
+        <activity
+            android:name=".ServCanc"
+            android:exported="false" />
+        <activity
+            android:name=".ServMec"
+            android:exported="false" />
+        <activity
+            android:name=".Aceptar"
+            android:exported="false" />
+        <activity
+            android:name=".UserMtc"
+            android:exported="false" />
+        <activity
+            android:name=".User"
+            android:exported="false" />
+        <activity
+            android:name=".PerfilMec"
+            android:exported="false" />
+        <activity
+            android:name=".Noti2"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Noti"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".Alarma"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Dialog" />
+        <activity
+            android:name=".VerContac"
+            android:exported="false" />
+        <activity
+            android:name=".Contactos"
+            android:exported="false" />
+        <activity
+            android:name=".Ubicacion"
+            android:exported="false" />
+        <activity
+            android:name=".Manual"
+            android:exported="false" />
+        <activity
+            android:name=".Perfil2"
+            android:exported="false" />
+        <activity
+            android:name=".BtnPanico"
+            android:exported="false" />
+        <activity
+            android:name=".Login"
+            android:exported="false" />
+        <activity
+            android:name=".Registro"
+            android:exported="false" />
+        <activity
+            android:name=".Perfil"
+            android:exported="false" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <meta-data
+            android:name="preloaded_fonts"
+            android:resource="@array/preloaded_fonts" />
+    </application>
+
+</manifest>

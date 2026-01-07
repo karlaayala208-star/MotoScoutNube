@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="perfil">#E94F37</color>
+    <color name="fondo">#3F88C5</color>
+    <color name="num">#44BBA4</color>
+    <color name="igual">#393E41</color>
+    <color name="my_dark_primary">#BB86FC</color>
+    <color name="my_dark_primary_variant">#3700B3</color>
+    <color name="my_dark_background">#121212</color>
+    <color name="my_dark_surface">#1F1F1F</color>
+    <color name="texto">#FFFFFFFF</color>
+    <color name="txtbtn">#FF000000</color>
+    <color name="btn">#FFFFFFFF</color>
+    <color name="enlace">#1135D0</color>
+    <color name="botonsecun">#74B6CC</color>
+</resources>
