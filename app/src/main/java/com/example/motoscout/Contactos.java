@@ -62,7 +62,7 @@ public class Contactos extends AppCompatActivity {
 
         executor.execute(() -> {
             try {
-                URL url = new URL("http://192.168.100.99/motoscout/add_contacto_emergencia.php");
+                URL url = new URL(Constantes.SERVER_URL + "add_contacto_emergencia.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);

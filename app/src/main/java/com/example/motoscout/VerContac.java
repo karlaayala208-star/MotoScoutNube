@@ -68,7 +68,7 @@ public class VerContac extends AppCompatActivity {
         @Override
         protected String doInBackground(Integer... params) {
             int userId = params[0];
-            String urlString = "http://192.168.100.99/motoscout/get_contactos_emergencia.php?id_usuario=" + userId;
+            String urlString = Constantes.SERVER_URL + "get_contactos_emergencia.php?id_usuario=" + userId;
             StringBuilder result = new StringBuilder();
             try {
                 URL url = new URL(urlString);

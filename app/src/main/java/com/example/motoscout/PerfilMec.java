@@ -58,7 +58,7 @@ public class PerfilMec extends AppCompatActivity {
         new Thread(() -> {
             try {
                 // Cambia la IP y ruta a la de tu servidor y archivo PHP
-                URL url = new URL("http://192.168.100.99/motoscout/get_calificaciones.php?id_mecanico=" + idMecanico);
+                URL url = new URL(Constantes.SERVER_URL + "get_calificaciones.php?id_mecanico=" + idMecanico);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);

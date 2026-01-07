@@ -60,7 +60,7 @@ public class detalle_solicitud extends AppCompatActivity {
     private void cargarDetalleServicio() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://192.168.100.99/motoscout/get_detalle_solicitud.php?id_servicio=" + idServicio);
+                URL url = new URL(Constantes.SERVER_URL + "get_detalle_solicitud.php?id_servicio=" + idServicio);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
@@ -135,7 +135,7 @@ public class detalle_solicitud extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                URL url = new URL("http://192.168.100.99/motoscout/finalizar_servicio.php");
+                URL url = new URL(Constantes.SERVER_URL + "finalizar_servicio.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);

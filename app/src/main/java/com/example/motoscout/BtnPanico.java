@@ -132,7 +132,7 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
 
         new Thread(() -> {
             try {
-                URL url = new URL("http://192.168.100.99/motoscout/get_contactos_emergencia.php?id_usuario=" + idUsuario);
+                URL url = new URL(Constantes.SERVER_URL + "get_contactos_emergencia.php?id_usuario=" + idUsuario);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);

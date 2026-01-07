@@ -102,7 +102,7 @@ public class Registro extends AppCompatActivity {
             }
 
             try {
-                URL url = new URL("http://192.168.100.99/motoscout/registro_usuario.php");
+                URL url = new URL(Constantes.SERVER_URL + "registro_usuario.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
