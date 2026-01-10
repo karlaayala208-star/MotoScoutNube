@@ -33,7 +33,7 @@
         app:layout_constraintStart_toEndOf="@+id/imageView7"
         app:layout_constraintTop_toTopOf="@+id/imageView7"
         app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/motors" />
+        app:srcCompat="@mipmap/moto" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -46,7 +46,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
         app:layout_constraintTop_toTopOf="@+id/imageView5"
-        app:srcCompat="@mipmap/homer" />
+        app:srcCompat="@mipmap/casanueve" />
 
     <ImageView
         android:id="@+id/imageView5"
@@ -58,7 +58,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView"
         app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:srcCompat="@mipmap/llaver" />
+        app:srcCompat="@mipmap/llave" />
 
     <ImageView
         android:id="@+id/imageView"
@@ -70,7 +70,7 @@
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@mipmap/calendarioapp" />
+        app:srcCompat="@mipmap/calendar" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -85,13 +85,14 @@
 
         <TextView
             android:id="@+id/textView11"
-            android:layout_width="match_parent"
+            android:layout_width="352dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/botonsecun"
+            android:fontFamily="@font/chicle"
             android:text="Ingresa una ubicacion para buscar mecanicos cercanos"
             android:textAlignment="center"
-            android:textColor="@color/black"
+            android:textColor="@color/btn"
             android:textSize="20sp" />
 
         <ImageButton
@@ -99,7 +100,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            app:srcCompat="@mipmap/lupar" />
+            app:srcCompat="@mipmap/lupa" />
 
     </LinearLayout>
 
