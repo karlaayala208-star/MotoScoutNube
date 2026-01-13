@@ -17,39 +17,46 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvMarca"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:text="Marca: Honda"
+        android:hint="Marca"
         android:textColor="@color/black"
-        android:textSize="20sp"
+        android:textSize="18sp"
         android:textStyle="bold"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/img_moto"
         app:layout_constraintTop_toTopOf="@+id/img_moto" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvModelo"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Modelo: CB500"
+        android:hint="Modelo"
         android:textColor="@color/black"
         android:textSize="16sp"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvMarca"
         app:layout_constraintTop_toBottomOf="@+id/tvMarca" />
 
-    <TextView
+    <EditText
         android:id="@+id/tvAnio"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
-        android:text="Año: 2021"
+        android:hint="Año"
+        android:inputType="number"
         android:textColor="@color/black"
         android:textSize="16sp"
+        android:background="@android:drawable/edit_text"
+        android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/tvModelo"
         app:layout_constraintTop_toBottomOf="@+id/tvModelo" />
@@ -64,10 +71,10 @@
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_moto" />
+        app:layout_constraintTop_toBottomOf="@+id/tvAnio" />
 
     <EditText
-        android:id="@+id/etKilometraje"
+        android:id="@+id/tvKilometraje"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -93,7 +100,7 @@
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etKilometraje" />
+        app:layout_constraintTop_toBottomOf="@+id/tvKilometraje" />
 
     <Button
         android:id="@+id/btn_alrt"
@@ -107,5 +114,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_mnl" />
+
+    <Button
+        android:id="@+id/btn_guardar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="@color/fondo"
+        android:text="Guardar Moto"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_alrt" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

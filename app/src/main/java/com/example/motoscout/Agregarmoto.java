@@ -1,7 +1,10 @@
 package com.example.motoscout;
 
-import android.content.SharedPreferences;
+import android.Manifest;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -11,8 +14,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -31,6 +38,8 @@ import okhttp3.Response;
 public class Agregarmoto extends AppCompatActivity {
 
     private static final int REQUEST_IMAGE_PICK = 100;
+    private static final int REQUEST_IMAGE_CAPTURE = 101;
+    private static final int PERMISSION_CAMERA_CODE = 200;
 
     private ImageView imgMoto;
     private EditText etMarca, etModelo, etAnio, etKilometraje;
@@ -52,10 +61,10 @@ public class Agregarmoto extends AppCompatActivity {
         });
 
         imgMoto = findViewById(R.id.imgPreview);
-        etMarca = findViewById(R.id.etMarca);
-        etModelo = findViewById(R.id.etModelo);
-        etAnio = findViewById(R.id.etAnio);
-        etKilometraje = findViewById(R.id.etKilometraje);
+        etMarca = findViewById(R.id.tvMarca);
+        etModelo = findViewById(R.id.tvModelo);
+        etAnio = findViewById(R.id.tvAnio);
+        etKilometraje = findViewById(R.id.tvKilometraje);
         btnSeleccionarImagen = findViewById(R.id.btnSeleccionarImagen);
         btnGuardar = findViewById(R.id.btnGuardar);
 
@@ -67,8 +76,22 @@ public class Agregarmoto extends AppCompatActivity {
             return;
         }
 
-        btnSeleccionarImagen.setOnClickListener(v -> abrirGaleria());
+        btnSeleccionarImagen.setOnClickListener(v -> mostrarDialogoImagen());
         btnGuardar.setOnClickListener(v -> guardarMoto());
+    }
+
+    private void mostrarDialogoImagen() {
+        String[] opciones = {"Elegir de Galería", "Tomar Foto"};
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Seleccionar Imagen");
+        builder.setItems(opciones, (dialog, which) -> {
+            if (which == 0) {
+                abrirGaleria();
+            } else {
+                verificarPermisosCamara();
+            }
+        });
+        builder.show();
     }
 
     private void abrirGaleria() {
@@ -76,12 +99,45 @@ public class Agregarmoto extends AppCompatActivity {
         startActivityForResult(intent, REQUEST_IMAGE_PICK);
     }
 
+    private void verificarPermisosCamara() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, PERMISSION_CAMERA_CODE);
+        } else {
+            abrirCamara();
+        }
+    }
+
+    private void abrirCamara() {
+        ContentValues values = new ContentValues();
+        values.put(MediaStore.Images.Media.TITLE, "Nueva Foto Moto");
+        selectedImageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
+        startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == PERMISSION_CAMERA_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                abrirCamara();
+            } else {
+                Toast.makeText(this, "Permiso de cámara denegado", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == REQUEST_IMAGE_PICK && resultCode == RESULT_OK && data != null) {
-            selectedImageUri = data.getData();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == REQUEST_IMAGE_PICK && data != null) {
+                selectedImageUri = data.getData();
+            }
+            // En REQUEST_IMAGE_CAPTURE, selectedImageUri ya contiene la URI de la foto
             imgMoto.setImageURI(selectedImageUri);
         }
     }
@@ -108,7 +164,6 @@ public class Agregarmoto extends AppCompatActivity {
 
         new Thread(() -> {
             try {
-                // Copiar contenido URI a archivo temporal interno
                 File tempFile = new File(getCacheDir(), "temp_image.jpg");
                 try (InputStream inputStream = getContentResolver().openInputStream(selectedImageUri);
                      FileOutputStream outputStream = new FileOutputStream(tempFile)) {
@@ -144,7 +199,7 @@ public class Agregarmoto extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     runOnUiThread(() -> {
                         Toast.makeText(this, "Moto registrada correctamente", Toast.LENGTH_LONG).show();
-                        setResult(RESULT_OK);  // <- Devuelve resultado OK
+                        setResult(RESULT_OK);
                         finish();
                     });
                 } else {

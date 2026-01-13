@@ -66,7 +66,7 @@ public class MotoAdapter extends RecyclerView.Adapter<MotoAdapter.MotoViewHolder
             tvMarca = itemView.findViewById(R.id.tvMarca);
             tvModelo = itemView.findViewById(R.id.tvModelo);
             tvAnio = itemView.findViewById(R.id.tvAnio);
-            etKilometraje = itemView.findViewById(R.id.etKilometraje);
+            etKilometraje = itemView.findViewById(R.id.tvKilometraje);
         }
     }
 }
