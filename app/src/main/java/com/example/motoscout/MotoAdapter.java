@@ -43,7 +43,7 @@ public class MotoAdapter extends RecyclerView.Adapter<MotoAdapter.MotoViewHolder
 
         String baseUrl = "http://10.0.2.2/"; // Cambia según tu servidor
         Glide.with(holder.imgMoto.getContext())
-                .load(baseUrl + moto.getImagenUrl()) // Asumo que tienes este método que devuelve la ruta relativa, p. ej "images/abc123.jpg"
+                .load(baseUrl + moto.getImagenUrl()) // Asumo que tienes este metodo que devuelve la ruta relativa, p. ej "images/abc123.jpg"
                 .placeholder(R.mipmap.garage)
                 .error(R.mipmap.garage)
                 .into(holder.imgMoto);
