@@ -37,6 +37,7 @@ android {
 dependencies {
     implementation(libs.appcompat)
     implementation("com.github.bumptech.glide:glide:4.15.1")
+    implementation(libs.play.services.location)
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
     implementation(libs.material)
     implementation(libs.activity)
@@ -45,6 +46,9 @@ dependencies {
     implementation(libs.navigation.ui)
     implementation(libs.lifecycle.livedata.ktx)
     implementation(libs.lifecycle.viewmodel.ktx)
+
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 
     // OkHttp para las peticiones HTTP y subida de imagen
     implementation("com.squareup.okhttp3:okhttp:4.11.0")

@@ -8,32 +8,86 @@
     android:background="@color/white"
     tools:context=".Ubicacion">
 
-    <ImageView
-        android:id="@+id/imageView12"
-        android:layout_width="61dp"
-        android:layout_height="0dp"
-        android:background="@color/botonsecun"
-        android:onClick="Perfil"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="0dp"
+        android:layout_height="76dp"
+        android:background="@color/btn"
+        android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:layout_constraintTop_toTopOf="@+id/imageView11"
-        app:srcCompat="@mipmap/user" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView11"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@color/botonsecun"
+            android:fontFamily="@font/chicle"
+            android:text="Ingresa una ubicacion para buscar mecanicos cercanos"
+            android:textAlignment="center"
+            android:textColor="@color/btn"
+            android:textSize="20sp" />
+
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.2"
+            app:srcCompat="@mipmap/lupa" />
+    </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/button12"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="10dp"
+        android:backgroundTint="@color/fondo"
+        android:fontFamily="@font/chicle"
+        android:onClick="Buscar"
+        android:text="Buscar mecanicos cercanos"
+        android:textColor="@color/white"
+        android:textSize="34sp"
+        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
-        android:id="@+id/imageView11"
-        android:layout_width="78dp"
+        android:id="@+id/imageView"
+        android:layout_width="77dp"
+        android:layout_height="66dp"
+        android:background="@color/botonsecun"
+        android:onClick="Recordatorio"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/imageView5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:srcCompat="@mipmap/calendar" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="82dp"
         android:layout_height="0dp"
         android:background="@color/botonsecun"
-        android:onClick="Moto"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
-        app:layout_constraintEnd_toStartOf="@+id/imageView12"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        app:layout_constraintEnd_toStartOf="@+id/imageView7"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@mipmap/moto" />
+        app:layout_constraintStart_toEndOf="@+id/imageView"
+        app:layout_constraintTop_toTopOf="@+id/imageView"
+        app:srcCompat="@mipmap/llave" />
 
     <ImageView
         android:id="@+id/imageView7"
@@ -49,87 +103,29 @@
         app:srcCompat="@mipmap/casanueve" />
 
     <ImageView
-        android:id="@+id/imageView5"
-        android:layout_width="82dp"
+        android:id="@+id/imageView11"
+        android:layout_width="78dp"
         android:layout_height="0dp"
         android:background="@color/botonsecun"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
-        app:layout_constraintEnd_toStartOf="@+id/imageView7"
+        android:onClick="Moto"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+        app:layout_constraintEnd_toStartOf="@+id/imageView12"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
-        app:srcCompat="@mipmap/llave" />
+        app:layout_constraintStart_toEndOf="@+id/imageView7"
+        app:layout_constraintTop_toTopOf="@+id/imageView7"
+        app:srcCompat="@mipmap/moto" />
 
     <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="77dp"
-        android:layout_height="66dp"
-        android:background="@color/botonsecun"
-        android:onClick="Recordatorio"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/imageView5"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:srcCompat="@mipmap/calendar" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="407dp"
-        android:layout_height="76dp"
-        android:background="@color/btn"
-        android:orientation="horizontal"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <TextView
-            android:id="@+id/textView11"
-            android:layout_width="352dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/botonsecun"
-            android:fontFamily="@font/chicle"
-            android:text="Ingresa una ubicacion para buscar mecanicos cercanos"
-            android:textAlignment="center"
-            android:textColor="@color/btn"
-            android:textSize="20sp" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:srcCompat="@mipmap/lupa" />
-
-    </LinearLayout>
-
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="406dp"
+        android:id="@+id/imageView12"
+        android:layout_width="61dp"
         android:layout_height="0dp"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout2"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout2"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
-        app:srcCompat="@mipmap/mapr" />
-
-    <Button
-        android:id="@+id/button12"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/chicle"
-        android:onClick="Buscar"
-        android:text="Buscar mecanicos cercanos"
-        android:textColor="@color/white"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView"
+        android:background="@color/botonsecun"
+        android:onClick="Perfil"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.512"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageButton2"
-        app:layout_constraintVertical_bias="0.924" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageView11"
+        app:layout_constraintTop_toTopOf="@+id/imageView11"
+        app:srcCompat="@mipmap/user" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
