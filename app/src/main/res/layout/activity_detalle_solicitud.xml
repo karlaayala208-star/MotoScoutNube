@@ -15,6 +15,7 @@
             android:id="@+id/tvDetalleTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/andada"
             android:gravity="center"
             android:paddingBottom="16dp"
             android:text="Detalle de Solicitud"
@@ -75,9 +76,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/fondo"
-            android:fontFamily="@font/chicle"
+            android:fontFamily="@font/baloo_bhaijaan"
             android:text="Finalizar Servicio"
-            android:textSize="30sp" />
+            android:textSize="24sp" />
 
     </LinearLayout>
 

@@ -23,10 +23,10 @@
 
         <ImageView
             android:id="@+id/imageView28"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="53dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/fondo"
+            android:background="@color/botonsecun"
             android:onClick="Regresar"
             app:srcCompat="@mipmap/flecha" />
 
@@ -35,6 +35,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/andada"
             android:text="Motociclista"
             android:textAlignment="center"
             android:textColor="@color/black"
