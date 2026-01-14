@@ -116,18 +116,4 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_mnl" />
 
-    <Button
-        android:id="@+id/btn_guardar"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/baloo_bhaijaan"
-        android:text="Guardar Moto"
-        android:textColor="@color/white"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_alrt" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>
