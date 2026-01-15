@@ -3,6 +3,7 @@
     android:id="@+id/scrollView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/fondo"
     android:padding="16dp">
 
     <LinearLayout
@@ -14,43 +15,44 @@
             android:id="@+id/tvDetalleTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/andada"
+            android:gravity="center"
+            android:paddingBottom="16dp"
             android:text="Detalle de Solicitud"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:paddingBottom="16dp"/>
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvMoto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Moto: "
-            android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvTipoServicio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Tipo de Servicio: "
-            android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvFechaSolicitud"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="8dp"
             android:text="Fecha de Solicitud: "
-            android:textSize="18sp"
-            android:paddingBottom="8dp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tvEstado"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingBottom="16dp"
             android:text="Estado: "
-            android:textSize="18sp"
-            android:paddingBottom="16dp" />
+            android:textSize="18sp" />
 
         <!-- Campo editable monto -->
         <EditText
@@ -73,7 +75,10 @@
             android:id="@+id/btnFinalizar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Finalizar Servicio" />
+            android:backgroundTint="@color/fondo"
+            android:fontFamily="@font/baloo_bhaijaan"
+            android:text="Finalizar Servicio"
+            android:textSize="24sp" />
 
     </LinearLayout>
 

@@ -12,7 +12,7 @@
         android:id="@+id/imageView18"
         android:layout_width="82dp"
         android:layout_height="66dp"
-        android:background="@color/botonsecun"
+        android:background="@color/cielo"
         android:onClick="Perfil"
         app:layout_constraintBottom_toBottomOf="@+id/imageView17"
         app:layout_constraintEnd_toEndOf="parent"
@@ -25,42 +25,39 @@
         android:id="@+id/imageView17"
         android:layout_width="82dp"
         android:layout_height="66dp"
-        android:layout_marginStart="1dp"
-        android:background="@color/botonsecun"
+        android:background="@color/cielo"
         app:layout_constraintBottom_toBottomOf="@+id/imageView16"
         app:layout_constraintEnd_toStartOf="@+id/imageView18"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView16"
         app:layout_constraintTop_toTopOf="@+id/imageView16"
-        app:srcCompat="@mipmap/motors" />
+        app:srcCompat="@mipmap/moto" />
 
     <ImageView
         android:id="@+id/imageView16"
         android:layout_width="82dp"
         android:layout_height="66dp"
-        android:layout_marginStart="1dp"
-        android:background="@color/botonsecun"
+        android:background="@color/cielo"
         android:onClick="BtnPan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView17"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView15"
         app:layout_constraintTop_toTopOf="@+id/imageView15"
-        app:srcCompat="@mipmap/homer" />
+        app:srcCompat="@mipmap/casanueve" />
 
     <ImageView
         android:id="@+id/imageView15"
         android:layout_width="82dp"
         android:layout_height="66dp"
-        android:layout_marginStart="7dp"
-        android:background="@color/botonsecun"
+        android:background="@color/cielo"
         android:onClick="ContMec"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView16"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView14"
         app:layout_constraintTop_toTopOf="@+id/imageView14"
-        app:srcCompat="@mipmap/llaver" />
+        app:srcCompat="@mipmap/llave" />
 
     <ImageView
         android:id="@+id/imageView14"
@@ -69,25 +66,25 @@
         android:layout_marginStart="1dp"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="1dp"
-        android:background="@color/botonsecun"
+        android:background="@color/cielo"
         android:onClick="Recordatorios"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView15"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button15"
-        app:srcCompat="@mipmap/calendarioapp" />
+        app:srcCompat="@mipmap/calendar" />
 
     <Button
         android:id="@+id/button15"
         android:layout_width="149dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/chicle"
+        android:fontFamily="@font/baloo_bhaijaan"
         android:onClick="agregarMoto"
         android:text="Agregar moto "
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/imageView14"
         app:layout_constraintEnd_toStartOf="@+id/button16"
         app:layout_constraintHorizontal_bias="0.5"
@@ -99,10 +96,10 @@
         android:layout_width="149dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/chicle"
+        android:fontFamily="@font/baloo_bhaijaan"
         android:text="Eliminar moto"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/button15"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

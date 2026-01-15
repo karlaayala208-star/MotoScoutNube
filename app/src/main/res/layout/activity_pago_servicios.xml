@@ -21,10 +21,10 @@
 
         <ImageView
             android:id="@+id/imageView28"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="55dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/fondo"
+            android:background="@color/botonsecun"
             android:onClick="Regresar"
             app:srcCompat="@mipmap/flecha" />
 
@@ -33,6 +33,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/andada"
             android:text="Mecanico"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -46,6 +47,7 @@
         android:id="@+id/tvTitulo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/andada"
         android:gravity="center"
         android:padding="16dp"
         android:text="Factura de Servicio"
@@ -64,6 +66,7 @@
         android:id="@+id/tvServicio"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/andada"
         android:padding="8dp"
         android:text="Servicio: Reparación de Moto"
         android:textAlignment="center"
@@ -80,6 +83,7 @@
         android:id="@+id/tvCosto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/andada"
         android:padding="8dp"
         android:text="Costo del Servicio: $100 MX"
         android:textAlignment="center"
@@ -96,6 +100,7 @@
         android:id="@+id/tvComision"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/andada"
         android:padding="8dp"
         android:text="Comisión (15%): -$15 MX"
         android:textAlignment="center"
@@ -121,6 +126,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tvComision" />
+        app:layout_constraintTop_toBottomOf="@+id/tvComision"
+        android:fontFamily="@font/andada" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

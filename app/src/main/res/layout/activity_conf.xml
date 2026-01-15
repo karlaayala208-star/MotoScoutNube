@@ -13,6 +13,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:fontFamily="@font/andada"
         android:text="Informacion de la cuenta"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -33,10 +34,10 @@
 
         <ImageView
             android:id="@+id/imageView28"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/fondo"
+            android:background="@color/botonsecun"
             android:onClick="Regresar"
             app:srcCompat="@mipmap/flecha" />
 
@@ -45,10 +46,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/andada"
             android:text="Motociclista"
             android:textAlignment="center"
             android:textColor="@color/black"
-            android:textSize="24sp" />
+            android:textSize="30sp" />
 
     </LinearLayout>
 
@@ -69,6 +71,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="44dp"
         android:layout_marginTop="44dp"
+        android:fontFamily="@font/andada"
         android:text="Nombre: Karla"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -82,6 +85,7 @@
         android:id="@+id/txtapellM"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/andada"
         android:text="Apellido: Ayala"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -96,6 +100,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/andada"
         android:text="Fecha de nacimiento: 15/03/2003"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -110,6 +115,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/andada"
         android:text="Correo electronico: Karla"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -124,6 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/andada"
         android:text="Contraseña: 12345678"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -138,6 +145,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/andada"
         android:text="Numero: 5555555555"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -153,12 +161,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
         android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/chicle"
+        android:fontFamily="@font/baloo_bhaijaan"
         android:onClick="EditPer"
         android:text="Editar Perfil"
         android:textColor="@color/texto"
         android:textColorLink="@color/fondo"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"

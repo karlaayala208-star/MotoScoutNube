@@ -13,11 +13,11 @@
         android:layout_width="379dp"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/chicle"
+        android:fontFamily="@font/baloo_bhaijaan"
         android:onClick="EditRec"
         android:text="Agregar recordatorios"
         android:textColor="@color/white"
-        android:textSize="30sp"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -39,10 +39,10 @@
 
         <ImageView
             android:id="@+id/imageView28"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="74dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/fondo"
+            android:background="@color/botonsecun"
             android:onClick="Regresar"
             app:srcCompat="@mipmap/flecha" />
 

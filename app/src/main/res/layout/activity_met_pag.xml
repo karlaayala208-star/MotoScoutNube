@@ -28,7 +28,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/botonsecun"
+            android:background="@color/cielo"
             app:srcCompat="@mipmap/efect" />
 
         <TextView
@@ -36,6 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/andada"
             android:text="Efectivo"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -55,10 +56,10 @@
 
         <ImageView
             android:id="@+id/imageView28"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="46dp"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@color/fondo"
+            android:background="@color/botonsecun"
             android:onClick="Regresar"
             app:srcCompat="@mipmap/flecha" />
 
@@ -67,6 +68,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
+            android:fontFamily="@font/andada"
             android:text="Motociclista"
             android:textAlignment="center"
             android:textColor="@color/black"
@@ -81,7 +83,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="16dp"
-        android:fontFamily="@font/agbalumo"
+        android:fontFamily="@font/andada"
         android:text="Metodos de Pago"
         android:textAlignment="center"
         android:textColor="@color/black"
@@ -113,7 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/botonsecun"
+            android:background="@color/cielo"
             app:srcCompat="@mipmap/tarjeta" />
 
         <TextView
@@ -121,6 +123,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:fontFamily="@font/andada"
             android:text="Karla 1811"
             android:textAlignment="center"
             android:textColor="@color/black"

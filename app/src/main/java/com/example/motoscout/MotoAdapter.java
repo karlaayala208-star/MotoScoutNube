@@ -43,7 +43,7 @@ public class MotoAdapter extends RecyclerView.Adapter<MotoAdapter.MotoViewHolder
 
         String baseUrl = "http://10.0.2.2/"; // Cambia según tu servidor
         Glide.with(holder.imgMoto.getContext())
-                .load(baseUrl + moto.getImagenUrl()) // Asumo que tienes este método que devuelve la ruta relativa, p. ej "images/abc123.jpg"
+                .load(baseUrl + moto.getImagenUrl()) // Asumo que tienes este metodo que devuelve la ruta relativa, p. ej "images/abc123.jpg"
                 .placeholder(R.mipmap.garage)
                 .error(R.mipmap.garage)
                 .into(holder.imgMoto);
@@ -66,7 +66,7 @@ public class MotoAdapter extends RecyclerView.Adapter<MotoAdapter.MotoViewHolder
             tvMarca = itemView.findViewById(R.id.tvMarca);
             tvModelo = itemView.findViewById(R.id.tvModelo);
             tvAnio = itemView.findViewById(R.id.tvAnio);
-            etKilometraje = itemView.findViewById(R.id.etKilometraje);
+            etKilometraje = itemView.findViewById(R.id.tvKilometraje);
         }
     }
 }
