@@ -14,28 +14,36 @@
         android:layout_height="76dp"
         android:background="@color/btn"
         android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingStart="10dp"
+        android:paddingEnd="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView11"
+        <EditText
+            android:id="@+id/et_buscador"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:background="@color/botonsecun"
             android:fontFamily="@font/andada"
-            android:text="Ingresa una ubicacion para buscar mecanicos cercanos"
-            android:textAlignment="center"
+            android:hint="Ingresa una ubicación..."
+            android:inputType="textPostalAddress"
+            android:padding="10dp"
             android:textColor="@color/btn"
-            android:textSize="20sp" />
+            android:textColorHint="@color/btn"
+            android:textSize="16sp" />
 
         <ImageButton
             android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="0.2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:onClick="buscarUbicacion"
+            android:scaleType="centerInside"
             app:srcCompat="@mipmap/lupa" />
+
     </LinearLayout>
 
     <fragment
