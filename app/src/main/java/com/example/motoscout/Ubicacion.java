@@ -26,12 +26,14 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -71,6 +73,10 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        // Configuración del mapa para que se vea bien
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+        
         // Al cargar, intenta ir a la ubicación real del usuario
         habilitarUbicacionEnTiempoReal();
     }
@@ -99,18 +105,40 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback {
 
         // 3. Si encontramos algo, movemos el mapa
         if (listaDirecciones != null && !listaDirecciones.isEmpty()) {
+            mMap.clear(); // Limpiar marcadores anteriores
             Address direccionEncontrada = listaDirecciones.get(0);
             LatLng latLng = new LatLng(direccionEncontrada.getLatitude(), direccionEncontrada.getLongitude());
 
-            // Agregar un marcador en lo que se encontró
-            mMap.addMarker(new MarkerOptions().position(latLng).title(ubicacionBuscada));
+            // Agregar un marcador en lo que se encontró (Tú destino)
+            mMap.addMarker(new MarkerOptions().position(latLng).title("Mi destino: " + ubicacionBuscada));
 
-            // Mover la cámara
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+            // Simular mecánicos cercanos alrededor de la búsqueda
+            simularMecanicosCercanos(latLng);
 
-            Toast.makeText(this, "Ubicación encontrada", Toast.LENGTH_SHORT).show();
+            // Mover la cámara con un zoom que permita ver calles (16f es bueno para calles)
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f));
+
+            Toast.makeText(this, "Ubicación encontrada y mecánicos localizados", Toast.LENGTH_SHORT).show();
         } else {
             Toast.makeText(this, "Ubicación no encontrada", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void simularMecanicosCercanos(LatLng centro) {
+        Random random = new Random();
+        String[] nombres = {"Juan", "Pedro", "Luis", "Carlos", "Roberto"};
+        
+        for (int i = 0; i < 5; i++) {
+            // Generar un pequeño desplazamiento aleatorio (aprox 500m - 1km)
+            double latOffset = (random.nextDouble() - 0.5) / 100.0;
+            double lngOffset = (random.nextDouble() - 0.5) / 100.0;
+            LatLng posMec = new LatLng(centro.latitude + latOffset, centro.longitude + lngOffset);
+            
+            mMap.addMarker(new MarkerOptions()
+                    .position(posMec)
+                    .title("Mecánico: " + nombres[i])
+                    .snippet("Disponible")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         }
     }
 

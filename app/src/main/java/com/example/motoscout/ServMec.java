@@ -3,6 +3,7 @@ package com.example.motoscout;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
@@ -61,6 +63,10 @@ public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        
+        // Configurar mapa para que se vea bien
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
         // 3. Activar MI ubicación (El cliente esperando)
         activarUbicacionCliente();
@@ -81,13 +87,12 @@ public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
                             if (location != null) {
                                 LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                // Mover cámara a mi posición
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 14f));
+                                // Mover cámara a mi posición con zoom de calles
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 16f));
 
-                                // 4. Mostrar a Heriberto (El mecánico)
-                                // NOTA: Para ver a Heriberto moverse en tiempo real, necesitas Firebase.
-                                // Aquí simulamos que Heriberto está cerca de tu ubicación actual.
-                                simularUbicacionMecanico(location.getLatitude() + 0.005, location.getLongitude() + 0.005);
+                                // 4. Mostrar a Heriberto (El mecánico) y la ruta
+                                LatLng posHeriberto = new LatLng(location.getLatitude() + 0.005, location.getLongitude() + 0.005);
+                                dibujarRutaYMecanico(miUbicacion, posHeriberto);
                             }
                         }
                     });
@@ -100,16 +105,20 @@ public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
-    // Método para poner el marcador del mecánico
-    private void simularUbicacionMecanico(double lat, double lng) {
-        LatLng posHeriberto = new LatLng(lat, lng);
-
+    // Método para poner el marcador del mecánico y trazar la ruta
+    private void dibujarRutaYMecanico(LatLng miPos, LatLng posMec) {
         mMap.addMarker(new MarkerOptions()
-                .position(posHeriberto)
+                .position(posMec)
                 .title("Heriberto (Mecánico)")
                 .snippet("Llega en 5 min")
-                // Le ponemos color AZUL o un ícono de herramienta para diferenciarlo
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+
+        // Dibujar una línea que simule la ruta
+        mMap.addPolyline(new PolylineOptions()
+                .add(miPos, posMec)
+                .width(10)
+                .color(Color.BLUE)
+                .geodesic(true));
     }
 
     // Respuesta de la petición de permisos
