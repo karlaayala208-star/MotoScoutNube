@@ -5,7 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/fondoazul"
+    android:background="@color/fondo"
     tools:context=".MainActivity">
 
 
@@ -35,7 +35,7 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@mipmap/logooooo" />
+        app:srcCompat="@mipmap/logo" />
 
     <Button
         android:id="@+id/button"
