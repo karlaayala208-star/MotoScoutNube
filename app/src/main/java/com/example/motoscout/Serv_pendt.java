@@ -43,7 +43,7 @@ public class Serv_pendt extends AppCompatActivity {
     private void cargarSolicitudesDesdeServidor() {
         new Thread(() -> {
             try {
-                URL url = new URL("http://192.168.100.99/motoscout/get_solicitudes.php");
+                URL url = new URL(Constantes.SERVER_URL + "get_solicitudes.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
