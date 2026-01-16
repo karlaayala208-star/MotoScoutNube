@@ -89,7 +89,9 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
     public void onInfoWindowClick(@NonNull Marker marker) {
         // Si el marcador no es el de "Mi destino", ir al perfil
         if (marker.getTitle() != null && marker.getTitle().contains("Mecánico")) {
+            String nombre = marker.getTitle().replace("Mecánico: ", "");
             Intent intent = new Intent(this, Aceptar.class);
+            intent.putExtra("nombre_mecanico", nombre);
             startActivity(intent);
         }
     }
