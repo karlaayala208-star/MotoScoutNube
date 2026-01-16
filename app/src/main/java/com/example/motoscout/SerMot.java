@@ -3,6 +3,7 @@ package com.example.motoscout;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
@@ -26,6 +27,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class SerMot extends AppCompatActivity implements OnMapReadyCallback {
@@ -61,15 +63,12 @@ public class SerMot extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        
+        // Configuración para ver calles y controles
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
 
-        // 2. Colocar el marcador fijo de "Karla" (Destino)
-        // (En el futuro, estas coordenadas te llegarían desde la base de datos)
-        LatLng ubicacionKarla = new LatLng(19.4326, -99.1332);
-        mMap.addMarker(new MarkerOptions()
-                .position(ubicacionKarla)
-                .title("Ubicación de Karla (Cliente)"));
-
-        // 3. Activar la ubicación en tiempo real del Mecánico (Usuario actual)
+        // 2. Activar la ubicación en tiempo real del Mecánico (Usuario actual)
         activarMiUbicacionGPS();
     }
 
@@ -89,8 +88,21 @@ public class SerMot extends AppCompatActivity implements OnMapReadyCallback {
                             if (location != null) {
                                 LatLng miUbicacionReal = new LatLng(location.getLatitude(), location.getLongitude());
 
-                                // Mover la cámara a donde está el mecánico realmente
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacionReal, 14f));
+                                // Colocar el marcador fijo de "Karla" (Destino) cerca del usuario para simular
+                                LatLng ubicacionKarla = new LatLng(location.getLatitude() + 0.003, location.getLongitude() + 0.002);
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(ubicacionKarla)
+                                        .title("Ubicación de Karla (Cliente)"));
+
+                                // Dibujar ruta simulada
+                                mMap.addPolyline(new PolylineOptions()
+                                        .add(miUbicacionReal, ubicacionKarla)
+                                        .width(12)
+                                        .color(Color.RED)
+                                        .geodesic(true));
+
+                                // Mover la cámara a donde está el mecánico realmente con buen zoom
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacionReal, 16f));
                             }
                         }
                     });

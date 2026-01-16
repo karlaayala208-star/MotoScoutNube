@@ -59,6 +59,12 @@ public class serve extends AppCompatActivity implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        
+        // Configuración para que el mapa se vea detallado
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+        mMap.getUiSettings().setMyLocationButtonEnabled(true);
+        mMap.getUiSettings().setCompassEnabled(true);
+        
         // Cuando el mapa esté listo, activamos la ubicación
         activarUbicacionEnTiempoReal();
     }
@@ -77,7 +83,8 @@ public class serve extends AppCompatActivity implements OnMapReadyCallback {
                         public void onSuccess(Location location) {
                             if (location != null) {
                                 LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
-                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 15f));
+                                // Zoom de 16f para ver calles claramente
+                                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 16f));
                             }
                         }
                     });

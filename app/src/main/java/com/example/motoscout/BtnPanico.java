@@ -41,7 +41,7 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
     Runnable runnable;
 
     List<String> numerosEmergencia = new ArrayList<>();
-    String mensajeEmergencia = "¡Posible caída detectada! Necesito ayuda.";
+    String mensajeEmergencia = "¡Motoscout Alerta! Se ha detectado una caída de mi parte. Necesito ayuda urgente en mi ubicación actual.";
 
     boolean contactosCargados = false;
 
@@ -63,7 +63,7 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
             sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        // Solicita permiso en tiempo de ejecución si no está concedido
+        // Solicitar permisos de SMS si no están concedidos
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
         }
@@ -77,58 +77,71 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
         double y = event.values[1];
         double z = event.values[2];
 
+        // Cálculo de magnitud de aceleración
         aceleracion = Math.sqrt(x * x + y * y + z * z);
 
-        if (aceleracion > 25 && !alertaActiva) {
+        // Umbral de caída simulado (un valor alto indica impacto brusco)
+        if (aceleracion > 30 && !alertaActiva) {
             alertaActiva = true;
             mostrarDialogoDeAlerta();
         }
     }
 
     private void mostrarDialogoDeAlerta() {
+        // Reducimos el tiempo a 15 segundos para que la simulación sea más rápida en pruebas
+        int tiempoEspera = 15000; 
+
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Posible caída detectada")
-                .setMessage("¿Estás bien? Se enviará un SMS de emergencia en 40 segundos si no respondes.")
+                .setTitle("¡IMPACTO DETECTADO!")
+                .setMessage("¿Te encuentras bien? Se enviará un SMS de emergencia a tus contactos en " + (tiempoEspera/1000) + " segundos.")
                 .setCancelable(false)
-                .setPositiveButton("Estoy bien", (d, w) -> {
+                .setPositiveButton("ESTOY BIEN", (d, w) -> {
                     alertaActiva = false;
                     handler.removeCallbacks(runnable);
-                    Toast.makeText(this, "Alarma cancelada", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "Alerta de caída cancelada.", Toast.LENGTH_SHORT).show();
                 })
                 .create();
         dialog.show();
 
         runnable = this::enviarSMS;
-        handler.postDelayed(runnable, 40000); // 40 segundos
+        handler.postDelayed(runnable, tiempoEspera);
     }
 
     private void enviarSMS() {
+        if (!alertaActiva) return; // Si el usuario ya canceló, no enviar
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Permiso para enviar SMS no concedido", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Sin permiso para enviar SMS", Toast.LENGTH_SHORT).show();
             return;
         }
 
-        if (!contactosCargados || numerosEmergencia.isEmpty()) {
-            Toast.makeText(this, "Contactos de emergencia no cargados, intenta de nuevo", Toast.LENGTH_LONG).show();
+        if (numerosEmergencia.isEmpty()) {
+            Toast.makeText(this, "No tienes contactos de emergencia registrados.", Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
             SmsManager sms = SmsManager.getDefault();
             for (String numero : numerosEmergencia) {
-                Toast.makeText(this, "Enviando a: " + numero, Toast.LENGTH_SHORT).show();
+                // Enviamos el mensaje real a cada número
                 sms.sendTextMessage(numero, null, mensajeEmergencia, null, null);
+                Toast.makeText(this, "SMS enviado a: " + numero, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this, "SMS enviados a contactos de emergencia", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "¡Alerta enviada a todos tus contactos!", Toast.LENGTH_LONG).show();
+            alertaActiva = false;
         } catch (Exception e) {
-            Toast.makeText(this, "Error al enviar SMS: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Fallo al enviar SMS: " + e.getMessage(), Toast.LENGTH_LONG).show();
         }
     }
 
     private void obtenerContactosEmergencia() {
         SharedPreferences prefs = getSharedPreferences("session", MODE_PRIVATE);
         int idUsuario = prefs.getInt("id_usuario", -1);
-        if (idUsuario == -1) return;
+        
+        if (idUsuario == -1) {
+            Toast.makeText(this, "Sesión no iniciada para cargar contactos.", Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         new Thread(() -> {
             try {
@@ -136,36 +149,28 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
                 conn.setConnectTimeout(5000);
-                conn.setReadTimeout(5000);
-
-                int responseCode = conn.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
+                
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-                    StringBuilder responseStr = new StringBuilder();
+                    StringBuilder res = new StringBuilder();
                     String line;
-                    while ((line = reader.readLine()) != null) {
-                        responseStr.append(line);
-                    }
+                    while ((line = reader.readLine()) != null) res.append(line);
                     reader.close();
 
-                    JSONObject json = new JSONObject(responseStr.toString());
+                    JSONObject json = new JSONObject(res.toString());
                     if (json.getBoolean("success")) {
                         numerosEmergencia.clear();
                         JSONArray contactos = json.getJSONArray("contactos");
                         for (int i = 0; i < contactos.length(); i++) {
-                            JSONObject contacto = contactos.getJSONObject(i);
-                            String telefono = contacto.getString("telefono_contacto");
-                            numerosEmergencia.add(telefono);
+                            numerosEmergencia.add(contactos.getJSONObject(i).getString("telefono_contacto"));
                         }
                         contactosCargados = true;
-                        runOnUiThread(() -> Toast.makeText(BtnPanico.this, "Contactos de emergencia cargados", Toast.LENGTH_SHORT).show());
+                        runOnUiThread(() -> Toast.makeText(BtnPanico.this, "Contactos listos para emergencia", Toast.LENGTH_SHORT).show());
                     }
                 }
-
                 conn.disconnect();
             } catch (Exception e) {
                 e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(BtnPanico.this, "Error al cargar contactos", Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
@@ -174,61 +179,56 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
     public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onPause() {
+        super.onPause();
+        // Detenemos el sensor al salir de la pantalla para ahorrar batería
         sensorManager.unregisterListener(this);
     }
 
-    // Permiso SMS resultado
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Reactivamos el sensor al volver
+        Sensor acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        if (acelerometro != null) {
+            sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_NORMAL);
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        if (requestCode == 1) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "Permiso para enviar SMS concedido", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(this, "Permiso para enviar SMS denegado", Toast.LENGTH_SHORT).show();
-            }
+        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(this, "Permiso SMS activado", Toast.LENGTH_SHORT).show();
         }
     }
 
     // Navegación
-
     public void AgrContac(View view) {
-        startActivity(new Intent(getApplicationContext(), Contactos.class));
-        finish();
+        startActivity(new Intent(this, Contactos.class));
     }
-
     public void VerContact(View view) {
-        startActivity(new Intent(getApplicationContext(), VerContac.class));
-        finish();
+        startActivity(new Intent(this, VerContac.class));
     }
-
     public void Alarm(View view) {
-        startActivity(new Intent(getApplicationContext(), Alarma.class));
+        startActivity(new Intent(this, Alarma.class));
     }
-
     public void Moto(View view) {
-        startActivity(new Intent(getApplicationContext(), Manual.class));
+        startActivity(new Intent(this, Manual.class));
     }
-
     public void ContMec(View view) {
-        startActivity(new Intent(getApplicationContext(), Ubicacion.class));
+        startActivity(new Intent(this, Ubicacion.class));
     }
-
     public void Perfil(View view) {
-        startActivity(new Intent(getApplicationContext(), UserMtc.class));
+        startActivity(new Intent(this, UserMtc.class));
     }
-
     public void Recordatorio(View view) {
-        startActivity(new Intent(getApplicationContext(), Recordatorios.class));
+        startActivity(new Intent(this, Recordatorios.class));
     }
-
     public void compartir(View view) {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
-        intent.putExtra(Intent.EXTRA_TEXT, "Me siento en peligro");
+        intent.putExtra(Intent.EXTRA_TEXT, "¡Alerta! Me siento en peligro.");
         startActivity(intent);
     }
 }
