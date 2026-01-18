@@ -7,11 +7,16 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
+
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.util.Log;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -20,6 +25,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
@@ -107,7 +113,7 @@ public class Agregarmoto extends AppCompatActivity {
         }
     }
 
-    private void abrirCamara() {
+    /*private void abrirCamara() {
         ContentValues values = new ContentValues();
         values.put(MediaStore.Images.Media.TITLE, "Nueva Foto Moto");
         selectedImageUri = getContentResolver().insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
@@ -115,7 +121,40 @@ public class Agregarmoto extends AppCompatActivity {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
         startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+    }*/
+
+    private void abrirCamara() {
+        try {
+            // Crear carpeta en almacenamiento privado del app
+            File fotosDir = new File(getExternalFilesDir(Environment.DIRECTORY_PICTURES), "motos");
+            if (!fotosDir.exists()) {
+                fotosDir.mkdirs(); // crea la carpeta si no existe
+            }
+
+            // Archivo con nombre único
+            File fotoFile = new File(fotosDir, "foto_moto_" + System.currentTimeMillis() + ".jpg");
+            fotoFile.createNewFile();
+
+            // Obtener Uri seguro
+            selectedImageUri = FileProvider.getUriForFile(
+                    this,
+                    getPackageName() + ".provider",
+                    fotoFile
+            );
+
+            // Intent cámara
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, selectedImageUri);
+            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            startActivityForResult(intent, REQUEST_IMAGE_CAPTURE);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Error al abrir cámara: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
@@ -142,7 +181,7 @@ public class Agregarmoto extends AppCompatActivity {
         }
     }
 
-    private void guardarMoto() {
+    /*private void guardarMoto() {
         String marca = etMarca.getText().toString().trim();
         String modelo = etModelo.getText().toString().trim();
         String anioStr = etAnio.getText().toString().trim();
@@ -208,6 +247,102 @@ public class Agregarmoto extends AppCompatActivity {
             } catch (Exception e) {
                 e.printStackTrace();
                 runOnUiThread(() -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+            }
+        }).start();
+    }*/
+
+    private void guardarMoto() {
+        String marca = etMarca.getText().toString().trim();
+        String modelo = etModelo.getText().toString().trim();
+        String anioStr = etAnio.getText().toString().trim();
+        String kmStr = etKilometraje.getText().toString().trim();
+
+        if (marca.isEmpty() || modelo.isEmpty() || anioStr.isEmpty() || kmStr.isEmpty() || selectedImageUri == null) {
+            Toast.makeText(this, "Completa todos los campos y selecciona una imagen", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        int anio, kilometraje;
+        try {
+            anio = Integer.parseInt(anioStr);
+            kilometraje = Integer.parseInt(kmStr);
+        } catch (NumberFormatException e) {
+            Toast.makeText(this, "Año y kilometraje deben ser números válidos", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        new Thread(() -> {
+            try {
+                // 1️⃣ Convertir URI a Bitmap
+                Bitmap bitmap = BitmapFactory.decodeStream(
+                        getContentResolver().openInputStream(selectedImageUri)
+                );
+
+                // 2️⃣ Crear archivo temporal comprimido
+                File tempFile = new File(getCacheDir(), "temp_image.jpg");
+                FileOutputStream fos = new FileOutputStream(tempFile);
+
+                // 🔥 Compresión clave (70% calidad)
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 70, fos);
+
+                fos.flush();
+                fos.close();
+
+                // 🔍 Log de tamaño (debug)
+                android.util.Log.d(
+                        "UPLOAD_MOTO",
+                        "Peso imagen: " + (tempFile.length() / 1024) + " KB"
+                );
+
+                // 3️⃣ Multipart
+                MediaType mediaType = MediaType.parse("image/jpeg");
+
+                RequestBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("id_usuario", String.valueOf(idUsuario))
+                        .addFormDataPart("marca", marca)
+                        .addFormDataPart("modelo", modelo)
+                        .addFormDataPart("anio", String.valueOf(anio))
+                        .addFormDataPart("kilometraje", String.valueOf(kilometraje))
+                        .addFormDataPart(
+                                "imagen",
+                                tempFile.getName(),
+                                RequestBody.create(tempFile, mediaType)
+                        )
+                        .build();
+
+                Request request = new Request.Builder()
+                        .url(Constantes.SERVER_URL + "upload_moto.php")
+                        .post(requestBody)
+                        .build();
+
+                OkHttpClient client = new OkHttpClient();
+                Response response = client.newCall(request).execute();
+
+                String responseBody = response.body() != null
+                        ? response.body().string()
+                        : "Sin respuesta del servidor";
+
+                // 🔍 LOG TÉCNICO REAL
+                android.util.Log.d("UPLOAD_MOTO", responseBody);
+
+                runOnUiThread(() -> {
+                    if (response.isSuccessful()) {
+                        Toast.makeText(this, "Moto registrada correctamente", Toast.LENGTH_LONG).show();
+                        setResult(RESULT_OK);
+                        finish();
+                    } else {
+                        Toast.makeText(this, "No se pudo registrar la moto", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                android.util.Log.e("UPLOAD_MOTO", "Error", e);
+
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Error al enviar la información", Toast.LENGTH_SHORT).show()
+                );
             }
         }).start();
     }
