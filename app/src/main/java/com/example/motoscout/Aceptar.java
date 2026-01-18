@@ -57,7 +57,6 @@ public class Aceptar extends AppCompatActivity {
         int fotoAleatoria = fotos[random.nextInt(fotos.length)];
         ivPerfil.setImageResource(fotoAleatoria);
     }
-
     public void VerUbi(View view) //intentos
     {
         Intent intent = new Intent(getApplicationContext(), ServMec.class);//intent es el nombre del intento

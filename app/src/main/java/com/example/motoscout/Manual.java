@@ -9,10 +9,12 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -24,6 +26,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -71,8 +74,78 @@ public class Manual extends AppCompatActivity {
         adapter = new MotoAdapter(listaMotos, this);
         recyclerView.setAdapter(adapter);
 
+        // Configurar el arrastre para reordenar
+        configurarArrastre();
+
         // Cargar datos iniciales
         cargarMotos(idUsuario);
+    }
+
+    private void configurarArrastre() {
+        ItemTouchHelper.SimpleCallback simpleCallback = new ItemTouchHelper.SimpleCallback(
+                ItemTouchHelper.UP | ItemTouchHelper.DOWN, 0) {
+            @Override
+            public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder target) {
+                int fromPosition = viewHolder.getAdapterPosition();
+                int toPosition = target.getAdapterPosition();
+
+                // Intercambiar en la lista de datos
+                Collections.swap(listaMotos, fromPosition, toPosition);
+                // Notificar al adaptador
+                adapter.notifyItemMoved(fromPosition, toPosition);
+
+                actualizarPrioridadesServidor();
+
+                return true;
+            }
+
+            @Override
+            public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
+                // No implementamos swipe para eliminar aquí
+            }
+        };
+
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleCallback);
+        itemTouchHelper.attachToRecyclerView(recyclerView);
+    }
+
+    private void actualizarPrioridadesServidor() {
+        executor.execute(() -> {
+            try {
+                SharedPreferences prefs = getSharedPreferences("session", MODE_PRIVATE);
+                int idUsuario = prefs.getInt("id_usuario", -1);
+                if (idUsuario == -1) return;
+
+                // 1. Construir un JSONArray con los IDs en el nuevo orden
+                JSONArray jsonOrden = new JSONArray();
+                for (Moto moto : listaMotos) {
+                    jsonOrden.put(moto.getId());
+                }
+                String ordenJsonString = jsonOrden.toString(); // Esto genera "[1,2,3]"
+
+                URL url = new URL(Constantes.SERVER_URL + "set_prioridad.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                // 2. Enviar datos codificados para evitar problemas con caracteres especiales
+                String postData = "id_usuario=" + idUsuario + "&orden=" + java.net.URLEncoder.encode(ordenJsonString, "UTF-8");
+                conn.getOutputStream().write(postData.getBytes("UTF-8"));
+
+                int responseCode = conn.getResponseCode();
+                if (responseCode == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder response = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) response.append(line);
+                    reader.close();
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void cargarMotos(int idUsuario) {
