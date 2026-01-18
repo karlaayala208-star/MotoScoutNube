@@ -27,6 +27,9 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 public class serve extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
@@ -82,10 +85,49 @@ public class serve extends AppCompatActivity implements OnMapReadyCallback {
                         @Override
                         public void onSuccess(Location location) {
                             if (location != null) {
+
+                                double lat = location.getLatitude();
+                                double lng = location.getLongitude();
+
                                 LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
                                 // Zoom de 16f para ver calles claramente
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 16f));
+
+                                enviarUbicacionServidor(lat, lng);
                             }
+                        }
+
+                        private void enviarUbicacionServidor(double lat, double lng) {
+                            new Thread(() -> {
+                                try {
+                                    // Leer el ID del mecánico logueado
+                                    int idUsuario = getSharedPreferences("session", MODE_PRIVATE)
+                                            .getInt("id_usuario", -1);
+
+                                    if (idUsuario == -1) return;
+
+                                    URL url = new URL(Constantes.SERVER_URL + "guardar_ubicacion.php");
+                                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                                    conn.setRequestMethod("POST");
+                                    conn.setDoOutput(true);
+                                    conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                                    String postData =
+                                            "id_usuario=" + idUsuario +
+                                                    "&latitud=" + lat +
+                                                    "&longitud=" + lng;
+
+                                    conn.getOutputStream().write(postData.getBytes());
+                                    conn.getOutputStream().flush();
+                                    conn.getOutputStream().close();
+
+                                    conn.getResponseCode(); // fuerza el envío
+                                    conn.disconnect();
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }).start();
                         }
                     });
 

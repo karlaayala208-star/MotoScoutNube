@@ -32,7 +32,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 import java.util.Random;
 
@@ -123,7 +130,7 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
             mMap.addMarker(new MarkerOptions().position(latLng).title("Mi destino: " + ubicacionBuscada));
 
             // Llamar a simular mecánicos (esto ahora se hace automático al buscar)
-            simularMecanicosCercanos(latLng);
+            //simularMecanicosCercanos(latLng);
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f));
             Toast.makeText(this, "Explora los mecánicos cercanos en el mapa", Toast.LENGTH_SHORT).show();
@@ -132,7 +139,7 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
         }
     }
 
-    private void simularMecanicosCercanos(LatLng centro) {
+    /*private void simularMecanicosCercanos(LatLng centro) {
         Random random = new Random();
         String[] nombres = {"Juan", "Pedro", "Luis", "Carlos", "Roberto"};
 
@@ -147,7 +154,7 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
                     .snippet("Disponible - Toca aquí para ver perfil")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
         }
-    }
+    }*/
 
 
     private void habilitarUbicacionEnTiempoReal() {
@@ -171,12 +178,99 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
                     @Override
                     public void onSuccess(Location location) {
                         if (location != null) {
+
+                            double lat = location.getLatitude();
+                            double lng = location.getLongitude();
                             LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
                             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 15f));
+
+                            enviarUbicacionServidor(lat, lng);
+
+                            cargarMecanicosEnMapa();
                         }
                     }
                 });
     }
+
+    private void enviarUbicacionServidor(double lat, double lng) {
+        new Thread(() -> {
+            try {
+                // Leer el ID del usuario logueado
+                int idUsuario = getSharedPreferences("session", MODE_PRIVATE)
+                        .getInt("id_usuario", -1);
+
+                if (idUsuario == -1) return;
+
+                URL url = new URL(Constantes.SERVER_URL + "guardar_ubicacion.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+                String postData =
+                        "id_usuario=" + idUsuario +
+                                "&latitud=" + lat +
+                                "&longitud=" + lng;
+
+                conn.getOutputStream().write(postData.getBytes());
+                conn.getOutputStream().flush();
+                conn.getOutputStream().close();
+
+                conn.getResponseCode(); // fuerza el envío
+                conn.disconnect();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void cargarMecanicosEnMapa() {
+        new Thread(() -> {
+            try {
+                URL url = new URL(Constantes.SERVER_URL + "obtener_mecanicos.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
+                conn.connect();
+
+                BufferedReader reader = new BufferedReader(
+                        new InputStreamReader(conn.getInputStream())
+                );
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) sb.append(line);
+                reader.close();
+                conn.disconnect();
+
+                JSONObject response = new JSONObject(sb.toString());
+                if (response.getBoolean("success")) {
+                    JSONArray mecanicos = response.getJSONArray("mecanicos");
+                    runOnUiThread(() -> {
+                        for (int i = 0; i < mecanicos.length(); i++) {
+                            try {
+                                JSONObject m = mecanicos.getJSONObject(i);
+                                LatLng pos = new LatLng(
+                                        m.getDouble("latitud"),
+                                        m.getDouble("longitud")
+                                );
+                                mMap.addMarker(new MarkerOptions()
+                                        .position(pos)
+                                        .title("Mecánico: " + m.getString("nombre"))
+                                        .snippet("Disponible - Toca aquí para ver perfil")
+                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                                );
+                            } catch (Exception e) { e.printStackTrace(); }
+                        }
+                    });
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
