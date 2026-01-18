@@ -32,7 +32,7 @@ public class MotoAdapter extends RecyclerView.Adapter<MotoAdapter.MotoViewHolder
         return new MotoViewHolder(view);
     }
 
-    @Override
+    /*@Override
     public void onBindViewHolder(@NonNull MotoViewHolder holder, int position) {
         Moto moto = listaMotos.get(position);
 
@@ -47,7 +47,27 @@ public class MotoAdapter extends RecyclerView.Adapter<MotoAdapter.MotoViewHolder
                 .placeholder(R.mipmap.garage)
                 .error(R.mipmap.garage)
                 .into(holder.imgMoto);
+    }*/
+
+    @Override
+    public void onBindViewHolder(@NonNull MotoViewHolder holder, int position) {
+        Moto moto = listaMotos.get(position);
+
+        holder.tvMarca.setText("Marca: " + moto.getMarca());
+        holder.tvModelo.setText("Modelo: " + moto.getModelo());
+        holder.tvAnio.setText("Año: " + moto.getAnio());
+        holder.etKilometraje.setText(String.valueOf(moto.getKilometraje()));
+
+        // Ruta completa de la imagen
+        String urlImagen = Constantes.SERVER_URL + moto.getImagenUrl(); // aquí concatena tu servidor + ruta guardada
+
+        Glide.with(holder.imgMoto.getContext())
+                .load(urlImagen)
+                .placeholder(R.mipmap.garage) // imagen mientras carga
+                .error(R.mipmap.garage)       // imagen si falla
+                .into(holder.imgMoto);
     }
+
 
 
     @Override
