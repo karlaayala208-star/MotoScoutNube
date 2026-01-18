@@ -65,7 +65,7 @@ public class Calf extends AppCompatActivity {
     private void enviarCalificacion(int idServicio, int idUsuario, int idMecanico, float calificacion, String comentario) {
         new Thread(() -> {
             try {
-                URL url = new URL(Constantes.SERVER_URL + "insertar_calificacion.php");
+                URL url = new URL("http://192.168.100.99/motoscout/insertar_calificacion.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);

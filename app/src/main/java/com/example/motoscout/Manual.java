@@ -89,7 +89,7 @@ public class Manual extends AppCompatActivity {
     private List<Moto> cargarMotosDesdeAPI(int idUsuario) {
         List<Moto> motos = new ArrayList<>();
         try {
-            URL url = new URL(Constantes.SERVER_URL + "get_motos.php?id_usuario=" + idUsuario);
+            URL url = new URL("http://192.168.100.99/motoscout/get_motos.php?id_usuario=" + idUsuario);
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             conn.setConnectTimeout(5000);

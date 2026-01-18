@@ -189,7 +189,7 @@ public class Agregarmoto extends AppCompatActivity {
                         .build();
 
                 Request request = new Request.Builder()
-                        .url(Constantes.SERVER_URL + "upload_moto.php")
+                        .url("http://192.168.100.99/motoscout/upload_moto.php")
                         .post(requestBody)
                         .build();
 

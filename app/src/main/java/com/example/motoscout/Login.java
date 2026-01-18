@@ -70,7 +70,7 @@ public class Login extends AppCompatActivity {
 
         executor.execute(() -> {
             try {
-                URL url = new URL(Constantes.SERVER_URL + "login_usuario.php");
+                URL url = new URL("http://192.168.100.99/motoscout/login_usuario.php");
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("POST");
                 conn.setDoOutput(true);
