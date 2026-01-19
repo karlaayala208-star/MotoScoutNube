@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
@@ -31,11 +32,14 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.util.Locale;
+
 public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 102;
+    private TextView tvDistancia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +52,8 @@ public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        tvDistancia = findViewById(R.id.tvDistancia);
 
         // 1. Inicializar cliente de ubicación
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
@@ -91,7 +97,18 @@ public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
                                 mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 16f));
 
                                 // 4. Mostrar a Heriberto (El mecánico) y la ruta
-                                LatLng posHeriberto = new LatLng(location.getLatitude() + 0.005, location.getLongitude() + 0.005);
+                                // Coordenadas simuladas para Heriberto
+                                LatLng posHeriberto = new LatLng(location.getLatitude() + 0.012, location.getLongitude() + 0.012);
+                                
+                                // Calcular distancia usando Haversine
+                                double distanciaKm = calcularDistanciaHaversine(
+                                        miUbicacion.latitude, miUbicacion.longitude,
+                                        posHeriberto.latitude, posHeriberto.longitude
+                                );
+
+                                // Mostrar distancia al usuario
+                                tvDistancia.setText(String.format(Locale.getDefault(), "Distancia: %.2f Km", distanciaKm));
+
                                 dibujarRutaYMecanico(miUbicacion, posHeriberto);
                             }
                         }
@@ -105,18 +122,32 @@ public class ServMec extends AppCompatActivity implements OnMapReadyCallback {
         }
     }
 
+    /**
+     * Calcula la distancia entre dos puntos usando el método de Haversine
+     */
+    private double calcularDistanciaHaversine(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Radio de la Tierra en Km
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                   Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2)) *
+                   Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
     // Método para poner el marcador del mecánico y trazar la ruta
     private void dibujarRutaYMecanico(LatLng miPos, LatLng posMec) {
         mMap.addMarker(new MarkerOptions()
                 .position(posMec)
                 .title("Heriberto (Mecánico)")
-                .snippet("Llega en 5 min")
+                .snippet("En camino")
                 .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         // Dibujar una línea que simule la ruta
         mMap.addPolyline(new PolylineOptions()
                 .add(miPos, posMec)
-                .width(10)
+                .width(12)
                 .color(Color.BLUE)
                 .geodesic(true));
     }

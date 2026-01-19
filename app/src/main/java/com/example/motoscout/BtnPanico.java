@@ -27,10 +27,14 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class BtnPanico extends AppCompatActivity implements SensorEventListener {
 
@@ -63,12 +67,11 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
             sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_NORMAL);
         }
 
-        // Solicitar permisos de SMS si no están concedidos
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.SEND_SMS}, 1);
         }
 
-        obtenerContactosEmergencia(); // carga contactos al inicio
+        obtenerContactosEmergencia();
     }
 
     @Override
@@ -77,23 +80,57 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
         double y = event.values[1];
         double z = event.values[2];
 
-        // Cálculo de magnitud de aceleración
         aceleracion = Math.sqrt(x * x + y * y + z * z);
 
-        // Umbral de caída simulado (un valor alto indica impacto brusco)
         if (aceleracion > 30 && !alertaActiva) {
             alertaActiva = true;
+            registrarCaidaEnBD(); // Registrar inmediatamente en la BD
             mostrarDialogoDeAlerta();
         }
     }
 
+    private void registrarCaidaEnBD() {
+        SharedPreferences prefs = getSharedPreferences("session", MODE_PRIVATE);
+        int idUsuario = prefs.getInt("id_usuario", -1);
+        if (idUsuario == -1) return;
+
+        String fecha = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String hora = new SimpleDateFormat("HH:mm:ss", Locale.getDefault()).format(new Date());
+
+        new Thread(() -> {
+            try {
+                URL url = new URL(Constantes.SERVER_URL + "registrar_caida.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("POST");
+                conn.setDoOutput(true);
+                conn.setRequestProperty("Content-Type", "application/json");
+
+                JSONObject postData = new JSONObject();
+                postData.put("id_usuario", idUsuario);
+                postData.put("fecha", fecha);
+                postData.put("hora", hora);
+
+                OutputStream os = conn.getOutputStream();
+                os.write(postData.toString().getBytes("UTF-8"));
+                os.flush();
+                os.close();
+
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    // Caída registrada con éxito
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
     private void mostrarDialogoDeAlerta() {
-        // Reducimos el tiempo a 15 segundos para que la simulación sea más rápida en pruebas
         int tiempoEspera = 15000; 
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setTitle("¡IMPACTO DETECTADO!")
-                .setMessage("¿Te encuentras bien? Se enviará un SMS de emergencia a tus contactos en " + (tiempoEspera/1000) + " segundos.")
+                .setMessage("¿Te encuentras bien? Se enviará un SMS de emergencia en " + (tiempoEspera/1000) + " segundos.")
                 .setCancelable(false)
                 .setPositiveButton("ESTOY BIEN", (d, w) -> {
                     alertaActiva = false;
@@ -108,29 +145,25 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
     }
 
     private void enviarSMS() {
-        if (!alertaActiva) return; // Si el usuario ya canceló, no enviar
+        if (!alertaActiva) return;
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.SEND_SMS) != PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Sin permiso para enviar SMS", Toast.LENGTH_SHORT).show();
             return;
         }
 
         if (numerosEmergencia.isEmpty()) {
-            Toast.makeText(this, "No tienes contactos de emergencia registrados.", Toast.LENGTH_LONG).show();
             return;
         }
 
         try {
             SmsManager sms = SmsManager.getDefault();
             for (String numero : numerosEmergencia) {
-                // Enviamos el mensaje real a cada número
                 sms.sendTextMessage(numero, null, mensajeEmergencia, null, null);
-                Toast.makeText(this, "SMS enviado a: " + numero, Toast.LENGTH_SHORT).show();
             }
-            Toast.makeText(this, "¡Alerta enviada a todos tus contactos!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "¡Alerta enviada a tus contactos!", Toast.LENGTH_LONG).show();
             alertaActiva = false;
         } catch (Exception e) {
-            Toast.makeText(this, "Fallo al enviar SMS: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
     }
 
@@ -138,17 +171,13 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
         SharedPreferences prefs = getSharedPreferences("session", MODE_PRIVATE);
         int idUsuario = prefs.getInt("id_usuario", -1);
         
-        if (idUsuario == -1) {
-            Toast.makeText(this, "Sesión no iniciada para cargar contactos.", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (idUsuario == -1) return;
 
         new Thread(() -> {
             try {
                 URL url = new URL(Constantes.SERVER_URL + "get_contactos_emergencia.php?id_usuario=" + idUsuario);
                 HttpURLConnection conn = (HttpURLConnection) url.openConnection();
                 conn.setRequestMethod("GET");
-                conn.setConnectTimeout(5000);
                 
                 if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
                     BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -165,7 +194,6 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
                             numerosEmergencia.add(contactos.getJSONObject(i).getString("telefono_contacto"));
                         }
                         contactosCargados = true;
-                        runOnUiThread(() -> Toast.makeText(BtnPanico.this, "Contactos listos para emergencia", Toast.LENGTH_SHORT).show());
                     }
                 }
                 conn.disconnect();
@@ -181,14 +209,12 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onPause() {
         super.onPause();
-        // Detenemos el sensor al salir de la pantalla para ahorrar batería
         sensorManager.unregisterListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // Reactivamos el sensor al volver
         Sensor acelerometro = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         if (acelerometro != null) {
             sensorManager.registerListener(this, acelerometro, SensorManager.SENSOR_DELAY_NORMAL);
@@ -198,9 +224,6 @@ public class BtnPanico extends AppCompatActivity implements SensorEventListener 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == 1 && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            Toast.makeText(this, "Permiso SMS activado", Toast.LENGTH_SHORT).show();
-        }
     }
 
     // Navegación
