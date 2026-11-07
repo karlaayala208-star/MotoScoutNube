@@ -16,4 +16,9 @@
     <color name="enlace">#1135D0</color>
     <color name="botonsecun">#74B6CC</color>
     <color name="cielo">#DEF4FB</color>
+    <color name="azul_principal">#1565C0</color>
+    <color name="azul_boton">#1976D2</color>
+    <color name="azul_claro">#42A5F5</color>
+    <color name="texto_secundario">#546E7A</color>
+    <color name="blanco">#FFFFFF</color>
 </resources>
