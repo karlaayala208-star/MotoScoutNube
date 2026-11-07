@@ -1,7 +1,10 @@
 package com.example.motoscout;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,8 +14,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
-
-import java.util.Random;
 
 public class Aceptar extends AppCompatActivity {
 
@@ -33,33 +34,32 @@ public class Aceptar extends AppCompatActivity {
         tvMensaje = findViewById(R.id.textView28);
         ivPerfil = findViewById(R.id.imageView22);
 
-        // Obtener el nombre del mecánico del Intent
+        // Obtener datos del mecánico real del Intent
         String nombreMecanico = getIntent().getStringExtra("nombre_mecanico");
-        if (nombreMecanico != null) {
+        String fotoBase64 = getIntent().getStringExtra("foto_mecanico");
+
+        if (nombreMecanico != null && !nombreMecanico.isEmpty()) {
             tvMensaje.setText(nombreMecanico + " ha aceptado el servicio");
+        } else {
+            tvMensaje.setText("Un mecánico ha aceptado el servicio");
         }
 
-        // Cambiar la foto aleatoriamente
-        cambiarFotoAleatoria();
+        // Mostrar la foto real si existe, si no, poner la de defecto
+        if (fotoBase64 != null && !fotoBase64.isEmpty()) {
+            try {
+                byte[] decodedString = Base64.decode(fotoBase64, Base64.DEFAULT);
+                Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+                ivPerfil.setImageBitmap(decodedByte);
+            } catch (Exception e) {
+                ivPerfil.setImageResource(R.mipmap.ftoperfilmec);
+            }
+        } else {
+            ivPerfil.setImageResource(R.mipmap.ftoperfilmec);
+        }
     }
 
-    private void cambiarFotoAleatoria() {
-        int[] fotos = {
-                R.mipmap.ftoperfilmec,
-                R.mipmap.mecanicouno,
-                R.mipmap.mecanicodos,
-                R.mipmap.mecanicotres,
-                R.mipmap.mecanicocuatro,
-                R.mipmap.mecanicocinco
-        };
-
-        Random random = new Random();
-        int fotoAleatoria = fotos[random.nextInt(fotos.length)];
-        ivPerfil.setImageResource(fotoAleatoria);
-    }
-    public void VerUbi(View view) //intentos
-    {
-        Intent intent = new Intent(getApplicationContext(), ServMec.class);//intent es el nombre del intento
+    public void VerUbi(View view) {
+        Intent intent = new Intent(getApplicationContext(), ServMec.class);
         startActivity(intent);
     }
 }

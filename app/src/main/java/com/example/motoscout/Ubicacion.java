@@ -3,10 +3,13 @@ package com.example.motoscout;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -40,17 +43,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
+import java.util.Map;
 
-public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener{
+public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnInfoWindowClickListener {
 
     private GoogleMap mMap;
     private FusedLocationProviderClient fusedLocationClient;
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
 
-    // Variable para el campo de texto
     private EditText etBuscador;
+    private Map<String, JSONObject> mechanicDataMap = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,13 +68,9 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
             return insets;
         });
 
-        // 1. Vincular el EditText del buscador
         etBuscador = findViewById(R.id.et_buscador);
-
-        // Inicializar GPS
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Inicializar mapa
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         if (mapFragment != null) {
@@ -81,223 +81,116 @@ public class Ubicacion extends AppCompatActivity implements OnMapReadyCallback, 
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
-        // Configuración del mapa
         mMap.getUiSettings().setZoomControlsEnabled(true);
-        mMap.getUiSettings().setCompassEnabled(true);
-        
-        // Configurar el click en la ventana de información (cuando pican al nombre del mecánico)
         mMap.setOnInfoWindowClickListener(this);
-        
-        // Al cargar, intenta ir a la ubicación real del usuario
         habilitarUbicacionEnTiempoReal();
     }
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
-        // Si el marcador no es el de "Mi destino", ir al perfil
-        if (marker.getTitle() != null && marker.getTitle().contains("Mecánico")) {
-            String nombre = marker.getTitle().replace("Mecánico: ", "");
-            Intent intent = new Intent(this, Aceptar.class);
-            intent.putExtra("nombre_mecanico", nombre);
-            startActivity(intent);
+        JSONObject mechanicJson = mechanicDataMap.get(marker.getId());
+        if (mechanicJson != null) {
+            try {
+                Intent intent = new Intent(this, Aceptar.class);
+                intent.putExtra("nombre_mecanico", mechanicJson.getString("nombre") + " " + mechanicJson.getString("apellido"));
+                intent.putExtra("foto_mecanico", mechanicJson.optString("foto", ""));
+                startActivity(intent);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 
-    //  LÓGICA DE BÚSQUEDA
     public void buscarUbicacion(View view) {
         String ubicacionBuscada = etBuscador.getText().toString();
-
-        if (ubicacionBuscada.isEmpty()) {
-            Toast.makeText(this, "Por favor ingresa una ubicación", Toast.LENGTH_SHORT).show();
-            return;
-        }
+        if (ubicacionBuscada.isEmpty()) return;
 
         Geocoder geocoder = new Geocoder(this);
-        List<Address> listaDirecciones = null;
-
         try {
-            listaDirecciones = geocoder.getFromLocationName(ubicacionBuscada, 1);
+            List<Address> listaDirecciones = geocoder.getFromLocationName(ubicacionBuscada, 1);
+            if (listaDirecciones != null && !listaDirecciones.isEmpty()) {
+                mMap.clear();
+                mechanicDataMap.clear();
+                Address dir = listaDirecciones.get(0);
+                LatLng latLng = new LatLng(dir.getLatitude(), dir.getLongitude());
+                mMap.addMarker(new MarkerOptions().position(latLng).title("Destino: " + ubicacionBuscada));
+                mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15f));
+                
+                // CARGAR MECÁNICOS REALES DESDE LA BD
+                obtenerMecanicosDesdeBD();
+            }
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Error al buscar: revisa tu internet", Toast.LENGTH_SHORT).show();
-        }
-
-        if (listaDirecciones != null && !listaDirecciones.isEmpty()) {
-            mMap.clear();
-            Address direccionEncontrada = listaDirecciones.get(0);
-            LatLng latLng = new LatLng(direccionEncontrada.getLatitude(), direccionEncontrada.getLongitude());
-
-            mMap.addMarker(new MarkerOptions().position(latLng).title("Mi destino: " + ubicacionBuscada));
-
-            // Llamar a simular mecánicos (esto ahora se hace automático al buscar)
-            //simularMecanicosCercanos(latLng);
-
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16f));
-            Toast.makeText(this, "Explora los mecánicos cercanos en el mapa", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(this, "Ubicación no encontrada", Toast.LENGTH_SHORT).show();
         }
     }
 
-    /*private void simularMecanicosCercanos(LatLng centro) {
-        Random random = new Random();
-        String[] nombres = {"Juan", "Pedro", "Luis", "Carlos", "Roberto"};
+    private void obtenerMecanicosDesdeBD() {
+        new Thread(() -> {
+            try {
+                URL url = new URL(Constantes.SERVER_URL + "get_mecanicos.php");
+                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                conn.setRequestMethod("GET");
 
-        for (int i = 0; i < 5; i++) {
-            double latOffset = (random.nextDouble() - 0.5) / 100.0;
-            double lngOffset = (random.nextDouble() - 0.5) / 100.0;
-            LatLng posMec = new LatLng(centro.latitude + latOffset, centro.longitude + lngOffset);
+                if (conn.getResponseCode() == HttpURLConnection.HTTP_OK) {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+                    StringBuilder res = new StringBuilder();
+                    String line;
+                    while ((line = reader.readLine()) != null) res.append(line);
+                    reader.close();
 
-            mMap.addMarker(new MarkerOptions()
-                    .position(posMec)
-                    .title("Mecánico: " + nombres[i])
-                    .snippet("Disponible - Toca aquí para ver perfil")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    JSONObject json = new JSONObject(res.toString());
+                    if (json.getBoolean("success")) {
+                        JSONArray mecanicos = json.getJSONArray("mecanicos");
+                        runOnUiThread(() -> mostrarMecanicosEnMapa(mecanicos));
+                    }
+                }
+                conn.disconnect();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void mostrarMecanicosEnMapa(JSONArray mecanicos) {
+        for (int i = 0; i < mecanicos.length(); i++) {
+            try {
+                JSONObject m = mecanicos.getJSONObject(i);
+                String ubi = m.getString("ubicacion"); // "lat,lng"
+                if (ubi.contains(",")) {
+                    String[] parts = ubi.split(",");
+                    LatLng pos = new LatLng(Double.parseDouble(parts[0]), Double.parseDouble(parts[1]));
+                    
+                    Marker marker = mMap.addMarker(new MarkerOptions()
+                            .position(pos)
+                            .title("Mecánico: " + m.getString("nombre"))
+                            .snippet("Taller disponible - Toca para ver perfil")
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+                    
+                    mechanicDataMap.put(marker.getId(), m);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-    }*/
-
+    }
 
     private void habilitarUbicacionEnTiempoReal() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mMap.setMyLocationEnabled(true);
-            obtenerUbicacionActual();
-        } else {
-            ActivityCompat.requestPermissions(this,
-                    new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    LOCATION_PERMISSION_REQUEST_CODE);
-        }
-    }
-
-    private void obtenerUbicacionActual() {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
-        fusedLocationClient.getLastLocation()
-                .addOnSuccessListener(this, new OnSuccessListener<Location>() {
-                    @Override
-                    public void onSuccess(Location location) {
-                        if (location != null) {
-
-                            double lat = location.getLatitude();
-                            double lng = location.getLongitude();
-                            LatLng miUbicacion = new LatLng(location.getLatitude(), location.getLongitude());
-                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(miUbicacion, 15f));
-
-                            enviarUbicacionServidor(lat, lng);
-
-                            cargarMecanicosEnMapa();
-                        }
-                    }
-                });
-    }
-
-    private void enviarUbicacionServidor(double lat, double lng) {
-        new Thread(() -> {
-            try {
-                // Leer el ID del usuario logueado
-                int idUsuario = getSharedPreferences("session", MODE_PRIVATE)
-                        .getInt("id_usuario", -1);
-
-                if (idUsuario == -1) return;
-
-                URL url = new URL(Constantes.SERVER_URL + "guardar_ubicacion.php");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
-                conn.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-                String postData =
-                        "id_usuario=" + idUsuario +
-                                "&latitud=" + lat +
-                                "&longitud=" + lng;
-
-                conn.getOutputStream().write(postData.getBytes());
-                conn.getOutputStream().flush();
-                conn.getOutputStream().close();
-
-                conn.getResponseCode(); // fuerza el envío
-                conn.disconnect();
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    private void cargarMecanicosEnMapa() {
-        new Thread(() -> {
-            try {
-                URL url = new URL(Constantes.SERVER_URL + "obtener_mecanicos.php");
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setRequestMethod("GET");
-                conn.connect();
-
-                BufferedReader reader = new BufferedReader(
-                        new InputStreamReader(conn.getInputStream())
-                );
-                StringBuilder sb = new StringBuilder();
-                String line;
-                while ((line = reader.readLine()) != null) sb.append(line);
-                reader.close();
-                conn.disconnect();
-
-                JSONObject response = new JSONObject(sb.toString());
-                if (response.getBoolean("success")) {
-                    JSONArray mecanicos = response.getJSONArray("mecanicos");
-                    runOnUiThread(() -> {
-                        for (int i = 0; i < mecanicos.length(); i++) {
-                            try {
-                                JSONObject m = mecanicos.getJSONObject(i);
-                                LatLng pos = new LatLng(
-                                        m.getDouble("latitud"),
-                                        m.getDouble("longitud")
-                                );
-                                mMap.addMarker(new MarkerOptions()
-                                        .position(pos)
-                                        .title("Mecánico: " + m.getString("nombre"))
-                                        .snippet("Disponible - Toca aquí para ver perfil")
-                                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
-                                );
-                            } catch (Exception e) { e.printStackTrace(); }
-                        }
-                    });
+            fusedLocationClient.getLastLocation().addOnSuccessListener(loc -> {
+                if (loc != null) {
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(loc.getLatitude(), loc.getLongitude()), 14f));
+                    obtenerMecanicosDesdeBD(); // Cargar inicial
                 }
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                habilitarUbicacionEnTiempoReal();
-            } else {
-                Toast.makeText(this, "Se necesita permiso para mostrar tu ubicación", Toast.LENGTH_LONG).show();
-            }
+            });
+        } else {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
         }
     }
 
-    public void Moto(View view) {
-        Intent intent = new Intent(getApplicationContext(), Manual.class);
-        startActivity(intent);
-    }
-    public void BtnPan(View view) {
-        Intent intent = new Intent(getApplicationContext(), BtnPanico.class);
-        startActivity(intent);
-    }
-    public void Perfil(View view) {
-        Intent intent = new Intent(getApplicationContext(), UserMtc.class);
-        startActivity(intent);
-    }
-    public void Recordatorio(View view) {
-        Intent intent = new Intent(getApplicationContext(), Recordatorios.class);
-        startActivity(intent);
-    }
+    public void Moto(View view) { startActivity(new Intent(this, Manual.class)); }
+    public void BtnPan(View view) { startActivity(new Intent(this, BtnPanico.class)); }
+    public void Perfil(View view) { startActivity(new Intent(this, UserMtc.class)); }
+    public void Recordatorio(View view) { startActivity(new Intent(this, Recordatorios.class)); }
 }
