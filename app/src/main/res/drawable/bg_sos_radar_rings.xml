@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Anillo exterior con muy baja opacidad -->
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#0DFF1744" /> <!-- Rojo al ~5% de opacidad -->
+            <size android:width="260dp" android:height="260dp" />
+        </shape>
+    </item>
+
+    <!-- Anillo intermedio -->
+    <item android:top="20dp" android:bottom="20dp" android:left="20dp" android:right="20dp">
+        <shape android:shape="oval">
+            <solid android:color="#1AFF1744" /> <!-- Rojo al ~10% de opacidad -->
+        </shape>
+    </item>
+
+    <!-- Anillo interno más cercano al botón -->
+    <item android:top="40dp" android:bottom="40dp" android:left="40dp" android:right="40dp">
+        <shape android:shape="oval">
+            <solid android:color="#2EFF1744" /> <!-- Rojo al ~18% de opacidad -->
+        </shape>
+    </item>
+</layer-list>

@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.annotation.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
     tools:context=".BtnPanico">
 
+    <!-- Encabezado superior unificado -->
     <TextView
         android:id="@+id/textView8"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginHorizontal="24dp"
         android:fontFamily="@font/andada"
-        android:text="Si te sientes en peligro"
+        android:text="Asistencia SOS"
         android:textAlignment="center"
-        android:textColor="@color/txtbtn"
-        android:textSize="34sp"
+        android:textColor="#0D47A1"
+        android:textSize="28sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -26,147 +29,200 @@
         android:id="@+id/textView10"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="32dp"
+        android:layout_marginTop="8dp"
         android:fontFamily="@font/andada"
-        android:text="Presiona el botón"
+        android:text="Si te sientes en peligro, mantén presionado el botón."
         android:textAlignment="center"
-        android:textColor="@color/txtbtn"
-        android:textSize="34sp"
+        android:textColor="#546E7A"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="292dp"
-        android:layout_height="277dp"
-        android:layout_marginTop="36dp"
-        android:onClick="compartir"
-        app:layout_constraintBottom_toTopOf="@+id/button6"
+    <!-- Área del Botón de Pánico con Efecto Radar -->
+    <!-- Área del Botón de Pánico Ampliada y con Alto Contraste -->
+    <FrameLayout
+        android:id="@+id/flSOSContainer"
+        android:layout_width="280dp"
+        android:layout_height="280dp"
+        android:background="@drawable/bg_sos_radar_rings"
+        app:layout_constraintBottom_toTopOf="@+id/cardContacts"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
-        app:srcCompat="@mipmap/btnpanico" />
+        app:layout_constraintTop_toBottomOf="@+id/textView10">
 
-    <Button
-        android:id="@+id/button6"
-        android:layout_width="0dp"
+        <!-- Botón de SOS Circular Dominante -->
+        <!-- Se quita bg_sos_circle y se da elevación para que flote sobre el radar -->
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="220dp"
+            android:layout_height="220dp"
+            android:layout_gravity="center"
+            android:clickable="true"
+            android:focusable="true"
+            android:elevation="8dp"
+            android:onClick="compartir"
+            android:scaleType="fitCenter"
+            app:srcCompat="@mipmap/btnpanico" />
+    </FrameLayout>
+
+    <!-- Tarjeta de Gestión de Contactos (Rediseñada) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardContacts"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/baloo_bhaijaan"
-        android:onClick="AgrContac"
-        android:text="Agregar contactos"
-        android:textColor="@color/white"
-        android:textSize="14sp"
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginBottom="18dp"
+        app:cardBackgroundColor="#F8F9FA"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="0dp"
+        app:strokeColor="#ECEFF1"
+        app:strokeWidth="1dp"
         app:layout_constraintBottom_toTopOf="@+id/button10"
-        app:layout_constraintEnd_toStartOf="@+id/button7"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        android:backgroundTint="@color/fondo"
-        android:fontFamily="@font/baloo_bhaijaan"
-        android:onClick="VerContact"
-        android:text="Ver contactos"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/button6"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/button6"
-        app:layout_constraintTop_toTopOf="@+id/button6" />
+        app:layout_constraintStart_toStartOf="parent">
 
-    <Button
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+            <!-- "Cantidad de contactos" configurable desde java si es el caso, sino estático de momento -->
+            <TextView
+                android:id="@+id/tvCantidadContactos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:text="Contactos de emergencia configurados"
+                android:textColor="#37474F"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <!-- Subcontenedor de botones horizontales -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button6"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="AgrContac"
+                    android:text="Agregar"
+                    android:textColor="#0D47A1"
+                    android:textSize="14sp"
+                    app:icon="@android:drawable/ic_input_add"
+                    app:iconTint="#0D47A1" />
+
+                <!-- Línea de separación vertical elegante -->
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:background="#CFD8DC" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/button7"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:onClick="VerContact"
+                    android:text="Ver todos"
+                    android:textColor="#0D47A1"
+                    android:textSize="14sp"
+                    app:icon="@android:drawable/ic_menu_agenda"
+                    app:iconTint="#0D47A1" />
+            </LinearLayout>
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Botón de Simulación de Alerta de menor jerarquía -->
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button10"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/fondo"
+        android:layout_marginBottom="28dp"
         android:fontFamily="@font/baloo_bhaijaan"
         android:onClick="Alarm"
-        android:text="Simulacion de alerta"
-        android:textColor="@color/white"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/imageView6"
+        android:text="Probar simulación de alerta"
+        android:textAllCaps="false"
+        android:textColor="#546E7A"
+        app:cornerRadius="12dp"
+        app:strokeColor="#CFD8DC"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button6" />
+        app:layout_constraintStart_toStartOf="parent" />
 
+    <!-- Barra de navegación inferior con la estructura solicitada, ordenada y con soporte responsivo -->
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="0dp"
-        android:layout_height="93dp"
-        android:layout_marginTop="180dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="Recordatorio"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView6"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button10"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@mipmap/calendar" />
 
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="ContMec"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView8"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toTopOf="@+id/imageView4"
-        app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@mipmap/llave" />
 
     <ImageView
         android:id="@+id/imageView8"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView6"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView9"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView6"
-        app:layout_constraintTop_toTopOf="@+id/imageView6"
         app:srcCompat="@mipmap/casanueve" />
 
     <ImageView
         android:id="@+id/imageView9"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="Moto"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView8"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView10"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView8"
-        app:layout_constraintTop_toTopOf="@+id/imageView8"
-        app:layout_constraintVertical_bias="0.771"
         app:srcCompat="@mipmap/moto" />
 
     <ImageView
         android:id="@+id/imageView10"
         android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="Perfil"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView9"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView9"
-        app:layout_constraintTop_toTopOf="@+id/imageView9"
-        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@mipmap/user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

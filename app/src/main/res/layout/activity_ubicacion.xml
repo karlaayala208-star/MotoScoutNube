@@ -8,44 +8,7 @@
     android:background="@color/white"
     tools:context=".Ubicacion">
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
-        android:layout_height="76dp"
-        android:background="@color/btn"
-        android:orientation="horizontal"
-        android:gravity="center_vertical"
-        android:paddingStart="10dp"
-        android:paddingEnd="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-        <EditText
-            android:id="@+id/et_buscador"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@color/botonsecun"
-            android:fontFamily="@font/andada"
-            android:hint="Ingresa una ubicación..."
-            android:inputType="textPostalAddress"
-            android:padding="10dp"
-            android:textColor="@color/btn"
-            android:textColorHint="@color/btn"
-            android:textSize="16sp" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:onClick="buscarUbicacion"
-            android:scaleType="centerInside"
-            app:srcCompat="@mipmap/lupa" />
-
-    </LinearLayout>
-
+    <!-- Fragmento del mapa Google de extremo a extremo -->
     <fragment
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
@@ -54,14 +17,65 @@
         app:layout_constraintBottom_toTopOf="@+id/imageView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+    <!-- Barra de búsqueda flotante -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/cardSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="28dp"
+        app:cardBackgroundColor="@color/white"
+        app:cardCornerRadius="24dp"
+        app:cardElevation="6dp"
+        app:strokeWidth="0dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="12dp">
+
+            <EditText
+                android:id="@+id/et_buscador"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:fontFamily="@font/andada"
+                android:hint="Ingresa una ubicación..."
+                android:inputType="textPostalAddress"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/black"
+                android:textColorHint="#78909C"
+                android:textSize="16sp" />
+
+            <ImageButton
+                android:id="@+id/imageButton"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:onClick="buscarUbicacion"
+                android:scaleType="centerInside"
+                app:srcCompat="@mipmap/lupa"
+                app:tint="#0D47A1" />
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- Barra de navegación inferior -->
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="77dp"
-        android:layout_height="66dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="Recordatorio"
+        android:padding="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView5"
         app:layout_constraintHorizontal_bias="0.5"
@@ -70,53 +84,53 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="82dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView7"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView"
-        app:layout_constraintTop_toTopOf="@+id/imageView"
         app:srcCompat="@mipmap/llave" />
 
     <ImageView
         android:id="@+id/imageView7"
-        android:layout_width="103dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="BtnPan"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView5"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView11"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView5"
-        app:layout_constraintTop_toTopOf="@+id/imageView5"
         app:srcCompat="@mipmap/casanueve" />
 
     <ImageView
         android:id="@+id/imageView11"
-        android:layout_width="78dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="Moto"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView7"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/imageView12"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView7"
-        app:layout_constraintTop_toTopOf="@+id/imageView7"
         app:srcCompat="@mipmap/moto" />
 
     <ImageView
         android:id="@+id/imageView12"
-        android:layout_width="61dp"
-        android:layout_height="0dp"
+        android:layout_width="0dp"
+        android:layout_height="68dp"
         android:background="@color/cielo"
         android:onClick="Perfil"
-        app:layout_constraintBottom_toBottomOf="@+id/imageView11"
+        android:padding="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/imageView11"
-        app:layout_constraintTop_toTopOf="@+id/imageView11"
         app:srcCompat="@mipmap/user" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
